@@ -1,2 +1,2 @@
 # loginapp
-user authentification with express-passport localStrategy
+user authentication with express-passport localStrategy
