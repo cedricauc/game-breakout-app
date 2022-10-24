@@ -3,6 +3,12 @@
       <div class="card card-body text-center text-bg-dark">
         <h1><i class="fa-solid fa-dragon"></i></h1>
         <p>S'inscrire ou se connecter et jouer gratuitement</p>
+        <% if(success_msg != ''){ %>
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <%= success_msg %>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          <% } %> 
         <a href="/users/register" class="btn btn-primary btn-block mb-3"
           >S'inscrire</a
         >

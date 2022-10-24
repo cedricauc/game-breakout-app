@@ -22,13 +22,6 @@ mongoose.connect(db,{ useNewUrlParser: true, useUnifiedTopology: true})
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
 
-// function checkAuth() {
-//   return app.use((req, res, next) => {
-//     if (req.user) next()
-//     else res.redirect('/users/login')
-//   })
-// }
-
 // View engine
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
@@ -43,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Express session
 app.use(session({
   secret: secret,
-  resave: false,
+  resave: true,
   saveUninitialized: true,
   cookie: { secure: false }
 }))

@@ -23,11 +23,9 @@ passport.use(
     // Find user with requested email
     User.findOne({ email: username }).then((user) => {
       if (!user) {
-        console.log('not found')
         return cb(null, false, { message: 'User not found.' })
       }
       if (!user.validPassword(password)) {
-        console.log('pass not valid')
         return cb(null, false, { message: 'Incorrect username or password.' })
       }
       return cb(null, user)
@@ -39,21 +37,30 @@ router.get('/login', function (req, res) {
   res.render('login')
 })
 
-router.post(
-  '/login',
+// router.post(
+//   '/login',
+//   passport.authenticate('local', {
+//    failureRedirect: '/users/login'
+//   }),
+//   function (req, res) {
+//     res.render('dahsboard', {user: req.user.username} )
+//   },
+// )
+
+router.post('/login', (req, res, next) => {
   passport.authenticate('local', {
-   failureRedirect: '/users/login'
-  }),
-  function (req, res) {
-    res.redirect('/home')
-  },
-)
+    successRedirect: '/home',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next)
+})
 
 router.post('/logout', function (req, res, next) {
   req.logout(function (err) {
     if (err) {
       return next(err)
     }
+    req.flash('success_msg', 'Vous êtes déconnecté')
     res.redirect('/')
   })
 })
