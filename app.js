@@ -8,6 +8,7 @@ const passport = require('passport');
 const mongoose = require('mongoose')
 const db = require('./config/data').mongoURI
 const secret = require('./config/data').secret
+const helmet = require('helmet');
 
 const PORT = process.env.PORT || 5000;
 
@@ -54,11 +55,15 @@ app.use(function(req, res, next) {
     next();
   });
 
-// app.use(passport.authenticate('session'));
-// app.use((req, res, next) => {
-//   if (req.user) next()
-//   else res.redirect('/users/login')
-// })
+// catch 404 and forward to error handler
+// app.use(function (req, res, next) {
+//   next(createError(404));
+// });
+
+//Security HTTP Headers
+app.use(helmet({
+  contentSecurityPolicy:false
+}))
 
 app.use('/', routes);
 app.use('/users', users);
