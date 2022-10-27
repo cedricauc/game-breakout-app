@@ -4,13 +4,14 @@
   "description": "login system with passport",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "nodemon app.js",
     "dev": "nodemon app.js"
   },
   "author": "ip",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "*",
+    "bootstrap": "^5.0.0-beta2",
     "connect-flash": "*",
     "dotenv": "^16.0.3",
     "ejs": "*",
@@ -19,12 +20,15 @@
     "express-session": "*",
     "express-validator": "^6.14.2",
     "helmet": "^6.0.0",
+    "jquery": "^3.6.0",
     "mongodb": "4.10.0",
     "mongoose": "^6.6.5",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "bootstrap": "^5.0.0-beta2",
-    "jquery": "^3.6.0",
-    "socket.io": "^4.5.2"
+    "socket.io": "^4.5.2",
+    "socket.io-client": "^4.5.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
   }
 }

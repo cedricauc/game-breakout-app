@@ -1,8 +1,10 @@
-<% if(user) { %>
-    <h2 class="mt-4">Dashboard <%= user %></h2>
-<% } %>
-  
-<a href="/game" class="btn btn-primary btn-block mb-3">Game</a>
-<form action="/users/logout" method="post">
-    <button class="btn btn-secondary btn-block">Se déconnecter</button>
-</form>
+<div class="container">
+    <% if(user) { %>
+        <h2 class="mt-4">Dashboard <%= user %></h2>
+    <% } %>
+
+    <a href="/game" class="btn btn-primary btn-block mb-3">Game</a>
+    <form action="/users/logout" method="post">
+        <button class="btn btn-secondary btn-block">Se déconnecter</button>
+    </form>
+</div>

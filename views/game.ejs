@@ -1,5 +1,74 @@
-<% if (user) { %>
-    <h2>Bonjour <%= user %> !</h2>
-  <% } %>
-<h1 class="mt-4">Start game</h1>
-<a href="/home" class="btn btn-secondary">Retour dashboard</a>
+<!-- <% if (user) { %> -->
+<!--     <h2>Bonjour <%= user %> !</h2> -->
+<!--   <% } %> -->
+<!-- <h1 class="mt-4">Start game</h1> -->
+
+
+<div class="container-fluid bg-dark vh-100 m-0">
+  <div class="row h-100">
+
+      <!-- container -->
+      <div class="container mb-5">
+
+          <div class="row h-100 d-flex justify-content-center align-items-center">
+              <div class="col-sm-12 col-md-6">
+                <!-- start area -->
+                   <div class="mb-3" id="start-area">
+                   <a href="/home" class="btn btn-primary btn-lg mb-3">Retour dashboard</a>
+                   <form method="POST" id="startGame">
+                   <input type="hidden" value=<%= user %> id="username" name="username" >
+                        <button class="btn btn-primary btn-lg" id="start" type="submit">
+                            JOUER
+                        </button>
+                    </form>
+                  </div>
+
+                  <!-- notification -->
+                  <div class="card bg-transparent border-0 d-none" id="notification-card">
+                      <div class="alert text-center fs-5" role="alert" id="notification-message"></div>
+                  </div>
+
+                  <!-- canvas -->
+                  <div class="card d-none" id="game-card">
+                      <div class="content content--canvas"></div>
+                  </div>
+
+                  <!-- restart area-->
+                  <div class="card bg-transparent border-0 d-none" id="restart-area">
+                      <div class="card-body">
+                          <form method="POST" id="restartGame">
+                              <div class="d-flex justify-content-center">
+                                  <button
+                                          class="btn btn-primary btn-lg"
+                                          id="restart"
+                                          type="submit"
+                                  >
+                                      REJOUER
+                                  </button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+
+                  <!-- waiting area -->
+                  <div class="card bg-transparent border-0 d-none" id="waiting-area">
+                      <div class="card-body">
+                          <form method="POST" id="waitingGame">
+                              <div class="d-flex justify-content-center">
+                                  <button
+                                          class="btn btn-primary btn-lg"
+                                          id="waiting"
+                                          type="submit"
+                                  >
+                                      CONTINUER
+                                  </button>
+                              </div>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- /container -->
+  </div>
+</div>
