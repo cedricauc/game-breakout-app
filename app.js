@@ -102,10 +102,6 @@ const server = app.listen(PORT)
 const io = require('socket.io')(server)
 const { Socket } = require('socket.io')
 
-// const io = new Socket(server, {
-//   wsEngine: require("eiows").Server
-// });
-
 //Socket.io rooms
 let rooms = []
 

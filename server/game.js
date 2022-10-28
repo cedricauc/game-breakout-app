@@ -309,6 +309,8 @@ class Game {
             case 500:
                 this.score += 500
                 break
+            default:
+                break
         }
 
         if(bonus.consumable) {

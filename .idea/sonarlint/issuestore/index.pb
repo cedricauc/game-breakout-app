@@ -1,14 +1,8 @@
 
 B
 views/register.ejs,5\1\518a6436831701577319c124ceb027695f16743c
-C
-views/dashboard.ejs,a\8\a8cfbb3b5212ab6e2ef9dfece63304f70eae42f5
 ?
 views/index.ejs,4\9\496c03b4d5f1774ceafd2fb8b05f3c5113512c61
-?
-routes/users.js,0\1\0183ca13e8b379ffbb27ca8371a09f05510b35e8
-?
-routes/index.js,3\0\30dfc417d69af8ed298ed4111dcab68f38ca7f54
 B
 views/messages.ejs,1\6\16f9c82a332a9737b5abf782e3b38d23da1ec4f0
 ?
@@ -30,5 +24,3 @@ D
 views/layout.ejs,e\9\e92abd0d5bce073005703f6be9c7fbcb1d720c5a
 <
 package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
-6
-app.js,4\a\4a68969ef8e858229267b842dedf42ab5dde4d50

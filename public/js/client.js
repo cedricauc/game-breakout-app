@@ -30,7 +30,9 @@ let hue
 let timer
 let level
 
-const usernameInput = document.querySelector('#username')
+// const usernameInput = document.querySelector('#username')
+const usernameInput = 'test'
+
 const gameCard = document.querySelector('#game-card')
 const notificationCard = document.querySelector('#notification-card')
 const startArea = document.querySelector('#start-area')
@@ -44,6 +46,7 @@ const scoreText = document.querySelector('.score-text')
 const levelText = document.querySelector('.level-text')
 const timerText = document.querySelector('.timer-text')
 
+//const startGame = document.querySelector('#start-game')
 
 let canvas = {
   a: document.createElement('canvas'),
@@ -67,9 +70,11 @@ let paddleY = canvas.a.height - paddleHeight
 
 document.addEventListener('mousemove', mouseMoveHandler, false)
 
-$('#startGame').on('submit', function (e) {
-  e.preventDefault()
-  player.username = usernameInput.value
+
+//$('#startGame').on('submit', function (e) {
+$('#startGame').click(function (e) {
+  //e.preventDefault()
+  player.username = usernameInput
   player.paddleX = paddleX
   player.paddleY = paddleY
 
@@ -167,9 +172,9 @@ function showRestartArea() {
     notificationCard.classList.remove('d-none')
     restartArea.classList.remove('d-none')
     setNotificationMessage(
-      'alert-success',
-      'alert-danger',
-      'Tu as perdu la partie ' + player.username + ' !',
+        'alert-success',
+        'alert-danger',
+        'Tu as perdu la partie ' + player.username + ' !',
     )
   }
 }
@@ -182,9 +187,9 @@ function showWaitingArea() {
     notificationCard.classList.remove('d-none')
     waitingArea.classList.remove('d-none')
     setNotificationMessage(
-      'alert-danger',
-      'alert-success',
-      'Félicitations, tu as gagné la partie ' + player.username + ' !',
+        'alert-danger',
+        'alert-success',
+        'Félicitations, tu as gagné la partie ' + player.username + ' !',
     )
   }
 }
@@ -198,13 +203,13 @@ function setNotificationMessage(classToRemove, classToAdd, html) {
 function drawSprite(sprite) {
   ctx.a.save()
   ctx.a.translate(
-    sprite.position.x + sprite.width / 2,
-    sprite.position.y + sprite.height / 2,
+      sprite.position.x + sprite.width / 2,
+      sprite.position.y + sprite.height / 2,
   )
   ctx.a.rotate(sprite.rotation)
   ctx.a.translate(
-    -sprite.position.x - sprite.width / 2,
-    -sprite.position.y - sprite.height / 2,
+      -sprite.position.x - sprite.width / 2,
+      -sprite.position.y - sprite.height / 2,
   )
   ctx.a.globalAlpha = sprite.opacity
 
@@ -214,15 +219,15 @@ function drawSprite(sprite) {
   image.src = sprite.src
 
   ctx.a.drawImage(
-    image,
-    sprite.frames.val * (image.width / sprite.frames.max),
-    0,
-    image.width / sprite.frames.max,
-    image.height,
-    sprite.position.x,
-    sprite.position.y,
-    sprite.width,
-    sprite.height,
+      image,
+      sprite.frames.val * (image.width / sprite.frames.max),
+      0,
+      image.width / sprite.frames.max,
+      image.height,
+      sprite.position.x,
+      sprite.position.y,
+      sprite.width,
+      sprite.height,
   )
   ctx.a.restore()
 }

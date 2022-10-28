@@ -45,9 +45,9 @@
                     <div class="d-flex justify-content-center align-items-center flex-column h-100">
                         <!-- start area-->
                         <div class="d-flex align-content-center flex-wrap mb-3" id="start-area">
-                            <form method="POST" id="startGame">
+                            <form action="/game" method="post">
                                 <input type="hidden" value=<%= user %> id="username" name="username" >
-                                <button class="btn btn-primary btn-lg" id="start" type="submit">
+                                <button class="btn btn-primary btn-lg" id="startGame" type="submit">
                                     JOUER
                                 </button>
                             </form>

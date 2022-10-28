@@ -8,7 +8,7 @@ const User = require('../models/User')
 // Store user session
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    cb(null, { id: user.id, username: user.username })
+    cb(null, { id: user.id, username: user.email })
   })
 })
 passport.deserializeUser(function (user, cb) {
@@ -19,46 +19,46 @@ passport.deserializeUser(function (user, cb) {
 
 // Define strategy method for authentification
 passport.use(
-  new LocalStrategy({usernameField: 'email'}, function (username, password, cb) {
-    // Find user with requested email
-    User.findOne({ email: username }).then((user) => {
-      if (!user) {
-        return cb(null, false, { message: 'User not found.' })
-      }
-      if (!user.validPassword(password)) {
-        return cb(null, false, { message: 'Incorrect username or password.' })
-      }
-      return cb(null, user)
-    })
-  }),
+    new LocalStrategy({usernameField: 'email'}, function (username, password, cb) {
+      // Find user with requested email
+      User.findOne({ email: username }).then((user) => {
+        if (!user) {
+          return cb(null, false, { message: 'User not found.' })
+        }
+        if (!user.validPassword(password)) {
+          return cb(null, false, { message: 'Incorrect username or password.' })
+        }
+        return cb(null, user)
+      })
+    }),
 )
 
 router.get('/login', function (req, res) {
   res.render('login')
 })
 
-router.post(
-  '/login', 
-    passport.authenticate('local', {
-     failureRedirect: '/users/login'
-    }),
-  function (req, res) {
-    // Verify if free daily game available
-    let msgGame;
-    if(req.user.freeGameDate === "" || req.user.freeGameDate !== new Date().toDateString()){
-      msgGame = "Vous avez un jeu gratuit !"
-    } else msgGame = "Vous avez déjà joué votre jeu gratuit aujourd'hui ! Pour contunier visitez notre Boutique "
-    res.render('dashboard', {user: req.user.username, msg: msgGame} )
-  }
-)
+// router.post(
+//   '/login',
+//     passport.authenticate('local', {
+//      failureRedirect: '/users/login'
+//     }),
+//   function (req, res) {
+//     // Verify if free daily game available
+//     let msgGame;
+//     if(req.user.freeGameDate === "" || req.user.freeGameDate !== new Date().toDateString()){
+//       msgGame = "Vous avez un jeu gratuit !"
+//     } else msgGame = "Vous avez déjà joué votre jeu gratuit aujourd'hui ! Pour contunier visitez notre Boutique "
+//     res.render('dashboard', {user: req.user.username, msg: msgGame} )
+//   }
+// )
 
-// router.post('/login', (req, res, next) => {
-//   passport.authenticate('local', {
-//     successRedirect: '/home',
-//     failureRedirect: '/users/login',
-//     failureFlash: true
-//   })(req, res, next)
-// })
+router.post('/login',
+    passport.authenticate('local', {
+
+      successRedirect: '/game',
+      failureRedirect: '/users/login',
+      failureFlash: true
+    }))
 
 router.post('/logout', function (req, res, next) {
   req.logout(function (err) {
