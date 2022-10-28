@@ -66,11 +66,12 @@ class LevelMaker {
 
         let status = 0
 
-        // set brick base on map constant
+        // place brick base on map constant
         if (this.map[c][r] === 1) {
           status = Math.ceil(Math.sqrt(this.level + 1))
         }
 
+        // init brick
         bricks[c][r] = {
           x: brickX,
           y: brickY,
