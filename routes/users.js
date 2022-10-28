@@ -3,7 +3,6 @@ const router = express.Router()
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/User')
-const crypto = require('crypto')
 
 
 // Store user session
@@ -38,23 +37,28 @@ router.get('/login', function (req, res) {
   res.render('login')
 })
 
-// router.post(
-//   '/login',
-//   passport.authenticate('local', {
-//    failureRedirect: '/users/login'
-//   }),
-//   function (req, res) {
-//     res.render('dahsboard', {user: req.user.username} )
-//   },
-// )
+router.post(
+  '/login', 
+    passport.authenticate('local', {
+     failureRedirect: '/users/login'
+    }),
+  function (req, res) {
+    // Verify if free daily game available
+    let msgGame;
+    if(req.user.freeGameDate === "" || req.user.freeGameDate !== new Date().toDateString()){
+      msgGame = "Vous avez un jeu gratuit !"
+    } else msgGame = "Vous avez déjà joué votre jeu gratuit aujourd'hui ! Pour contunier visitez notre Boutique "
+    res.render('dashboard', {user: req.user.username, msg: msgGame} )
+  }
+)
 
-router.post('/login', (req, res, next) => {
-  passport.authenticate('local', {
-    successRedirect: '/home',
-    failureRedirect: '/users/login',
-    failureFlash: true
-  })(req, res, next)
-})
+// router.post('/login', (req, res, next) => {
+//   passport.authenticate('local', {
+//     successRedirect: '/home',
+//     failureRedirect: '/users/login',
+//     failureFlash: true
+//   })(req, res, next)
+// })
 
 router.post('/logout', function (req, res, next) {
   req.logout(function (err) {
