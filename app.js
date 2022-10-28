@@ -41,10 +41,6 @@ app.use(expressLayouts)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.use(
-  '/socket.io-client',
-  express.static(path.join(__dirname, 'node_modules/socket.io-client/dist')),
-)
 
 //Bootsrap css
 app.use(
@@ -102,8 +98,13 @@ app.use('/users', users)
 
 //Init socket.io
 const server = app.listen(PORT)
+
 const io = require('socket.io')(server)
 const { Socket } = require('socket.io')
+
+// const io = new Socket(server, {
+//   wsEngine: require("eiows").Server
+// });
 
 //Socket.io rooms
 let rooms = []
@@ -147,12 +148,6 @@ io.on('connection', (socket) => {
     io.to(room.id).emit('play', player, room.game)
   })
 
-  socket.on('play', (player) => {
-    const room = rooms.find((r) => r.id === player.roomId)
-
-    io.to(player.roomId).emit('play', player, room.game)
-  })
-
   socket.on('collision detection', (player) => {
     const room = rooms.find((r) => r.id === player.roomId)
     //console.log(`[collision detection] - ${player.id} - ${player.username}`)
@@ -167,7 +162,7 @@ io.on('connection', (socket) => {
 
     // update timer
     room.game.spawnTimer()
-    // update paddle axis
+    // update paddle position
     room.game.movePaddle()
     // update background particles
     room.game.moveParticles()
