@@ -24,3 +24,9 @@ D
 views/layout.ejs,e\9\e92abd0d5bce073005703f6be9c7fbcb1d720c5a
 <
 package.json,7\0\7030d0b2f71b999ff89a343de08c414af32fc93a
+?
+views/login.ejs,3\f\3f748e7b3e38d474ff6964f6a6d3381932b1eac9
+C
+views/dashboard.ejs,a\8\a8cfbb3b5212ab6e2ef9dfece63304f70eae42f5
+>
+server/game.js,5\5\555c23b41a93ba32c62340f3e2f439f46f3b79a4

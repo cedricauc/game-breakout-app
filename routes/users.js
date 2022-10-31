@@ -4,11 +4,10 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/User')
 
-
 // Store user session
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    cb(null, { id: user.id, username: user.email })
+    cb(null, { id: user.id, username: user.email, pseudo: user.username, date: user.freeGameDate })
   })
 })
 passport.deserializeUser(function (user, cb) {
@@ -37,24 +36,8 @@ router.get('/login', function (req, res) {
   res.render('login')
 })
 
-// router.post(
-//   '/login',
-//     passport.authenticate('local', {
-//      failureRedirect: '/users/login'
-//     }),
-//   function (req, res) {
-//     // Verify if free daily game available
-//     let msgGame;
-//     if(req.user.freeGameDate === "" || req.user.freeGameDate !== new Date().toDateString()){
-//       msgGame = "Vous avez un jeu gratuit !"
-//     } else msgGame = "Vous avez déjà joué votre jeu gratuit aujourd'hui ! Pour contunier visitez notre Boutique "
-//     res.render('dashboard', {user: req.user.username, msg: msgGame} )
-//   }
-// )
-
 router.post('/login',
     passport.authenticate('local', {
-
       successRedirect: '/game',
       failureRedirect: '/users/login',
       failureFlash: true

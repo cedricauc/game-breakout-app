@@ -6,12 +6,25 @@
 
                 <nav class="bg-primary">
                     <div class="row">
+                        <p><%= user %>
+                        <% if (flag) { %>
+                            <span> 1 jeu gratuit</span>
+                        <% } else { %>
+                            <span> vous avez utilisé le jeu gratuit</span>
+                        <% } %>
+                        </p>
+                    </div>
+                    <div class="row">
                         <!-- link -->
                         <div class="col-12 col-md-4">
                             <div class="flex p-4">
                                 <h2 class="text-center mb-3">
                                     <a class="text-black" href="">
                                         <i class="fa-solid fa-home"></i>
+                                    </a>
+
+                                    <a class="text-black" href="">
+                                        <i class="fa-solid fa-shopping-cart"></i>
                                     </a>
                                 </h2>
                             </div>
@@ -45,12 +58,11 @@
                     <div class="d-flex justify-content-center align-items-center flex-column h-100">
                         <!-- start area-->
                         <div class="d-flex align-content-center flex-wrap mb-3" id="start-area">
-                            <form action="/game" method="post">
-                                <input type="hidden" value=<%= user %> id="username" name="username" >
-                                <button class="btn btn-primary btn-lg" id="startGame" type="submit">
+                            <% if (flag) { %>
+                                <button class="btn btn-primary btn-lg" id="startGame" >
                                     JOUER
                                 </button>
-                            </form>
+                            <% } %>
                         </div>
 
                         <!-- game area -->

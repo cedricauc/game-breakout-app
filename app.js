@@ -20,6 +20,14 @@ const Game = require('./server/game.js')
 //Init app
 const app = express()
 
+const bodyParser = require("body-parser");
+const sessionMiddleware = session({ secret: "changeit", resave: false, saveUninitialized: false });
+app.use(sessionMiddleware);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 //Security HTTP Headers
 app.use(
   helmet({
@@ -101,6 +109,23 @@ const server = app.listen(PORT)
 
 const io = require('socket.io')(server)
 const { Socket } = require('socket.io')
+const User = require("./models/User");
+
+// convert a connect middleware to a Socket.IO middleware
+const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
+
+//middleware function with passport
+io.use(wrap(sessionMiddleware));
+io.use(wrap(passport.initialize()));
+io.use(wrap(passport.session()));
+
+io.use((socket, next) => {
+  if (socket.request.user) {
+    next();
+  } else {
+    next(new Error('unauthorized'))
+  }
+});
 
 //Socket.io rooms
 let rooms = []
@@ -109,14 +134,34 @@ let rooms = []
  * @type {Socket}
  */
 io.on('connection', (socket) => {
-  console.log(`[connection] ${socket.id}`)
+  //console.log(`[connection] ${socket.id}`)
+
+  // set socket.io session
+  const session = socket.request.session;
+  //console.log(`saving sid ${socket.id} in session ${session.id}`);
+  session.socketId = socket.id;
+  session.save();
 
   socket.on('playerData', (player) => {
+
+    // init params
+    let date = new Date().toDateString()
+    const filter = { email: socket.request.user.username };
+    const update = { freeGameDate: date };
+
+    // update user freeGameDate to db
+    User.findOneAndUpdate(filter, update).then((data) => {
+      const currentUser =
+          User.findOne(filter).then((data) => {
+            console.log(data)
+          });
+    });
+
     let room = null
 
     if (!player.roomId) {
       room = createRoom(player)
-      console.log(`[create room] - ${room.id} - ${player.username}`)
+      //console.log(`[create room] - ${room.id} - ${player.username}`)
     } else {
       room = rooms.find((r) => r.id === player.roomId)
 

@@ -30,7 +30,6 @@ let hue
 let timer
 let level
 
-// const usernameInput = document.querySelector('#username')
 const usernameInput = 'test'
 
 const gameCard = document.querySelector('#game-card')
@@ -70,10 +69,8 @@ let paddleY = canvas.a.height - paddleHeight
 
 document.addEventListener('mousemove', mouseMoveHandler, false)
 
-
-//$('#startGame').on('submit', function (e) {
 $('#startGame').click(function (e) {
-  //e.preventDefault()
+  e.preventDefault()
   player.username = usernameInput
   player.paddleX = paddleX
   player.paddleY = paddleY
