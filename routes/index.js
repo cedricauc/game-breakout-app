@@ -12,14 +12,20 @@ router.get('/game', passport.authenticate('session'), async function(req, res) {
   //console.log('route get ', req.user.pseudo);
   let today = new Date().toDateString()
   let flag = true
+  let msg = ""
   if(today == req.user.date) {
     flag = false
-  }
-  res.render('game', {user: req.user.pseudo, flag: flag});
+    msg = "Vous avez joué le jeu gratuit"
+  } else msg = "Vous avez 1 jeu gratuit"
+  res.render('game', {user: req.user.pseudo, flag, msg});
 });
 
 router.post('/shop', passport.authenticate('session'),  function(req, res) {
-  res.render('shop', {user: req.user.username});
+  res.render('shop', {user: req.user.pseudo});
+});
+
+router.post('/home', passport.authenticate('session'),  function(req, res) {
+  res.render('dashboard', {user: req.user.pseudo});
 });
 
 module.exports = router;

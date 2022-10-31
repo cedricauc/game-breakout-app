@@ -3,12 +3,10 @@
     <% if(user) { %>
         <h2 class="mt-4">Bonjour, <%= user %></h2>
     <% } %>
-    <% if(msg) { %>
-        <h2 class="mt-4"><%= msg %></h2>
-    <% } %>
+
 
     <!-- <a href="/game" class="btn btn-primary btn-block mb-3">Game</a> -->
-    <form action="/game" method="post">
+    <form action="/game" method="get">
         <button class="btn btn-secondary btn-block">Jouer</button>
     </form>
     <form action="/shop" method="post">

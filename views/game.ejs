@@ -6,12 +6,10 @@
 
                 <nav class="bg-primary">
                     <div class="row">
-                        <p><%= user %>
+                        <p class="mx-5"><%= user %>
                         <% if (flag) { %>
                             <span> 1 jeu gratuit</span>
-                        <% } else { %>
-                            <span> vous avez utilisé le jeu gratuit</span>
-                        <% } %>
+                        <% } %> 
                         </p>
                     </div>
                     <div class="row">
@@ -19,13 +17,12 @@
                         <div class="col-12 col-md-4">
                             <div class="flex p-4">
                                 <h2 class="text-center mb-3">
-                                    <a class="text-black" href="">
-                                        <i class="fa-solid fa-home"></i>
-                                    </a>
-
-                                    <a class="text-black" href="">
-                                        <i class="fa-solid fa-shopping-cart"></i>
-                                    </a>
+                                    <form action="/home" method="post">
+                                        <button class="btn btn-primary btn-lg text-black"><i class="fa-solid fa-home"></i></button>
+                                    </form>
+                                    <form action="/shop" method="post">
+                                        <button class="btn btn-primary btn-lg text-black"><i class="fa-solid fa-shopping-cart"></i></button>
+                                    </form>
                                 </h2>
                             </div>
                         </div>
@@ -62,6 +59,13 @@
                                 <button class="btn btn-primary btn-lg" id="startGame" >
                                     JOUER
                                 </button>
+                            <% } else {%>
+                                <form action="/shop" method="post">
+                                    <% if(msg != "") {%>
+                                        <p class="text-white"><%= msg  %></p>
+                                    <% } %>
+                                    <button class="btn btn-primary btn-lg">Boutique</button>
+                                </form>
                             <% } %>
                         </div>
 
