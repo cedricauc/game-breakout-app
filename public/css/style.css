@@ -1,0 +1,131 @@
+html {
+    height:100%;
+    box-sizing: border-box;
+}
+body {
+    height:100%;
+    padding: 0;
+    margin: 0;
+}
+* {
+    box-sizing: inherit;
+}
+#root {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+section {
+    display: block;
+}
+.form {
+    display: flex;
+}
+.nav .nav-item .nav-link i{
+    color: #343a40 ;
+    font-size: 2.2rem;
+}
+.nav .nav-item .nav-link.active i{
+    color: #17a2b8;
+    font-size: 2.2rem;
+}
+.nav .nav-item .nav-link i:hover {
+    color: #ffc107;
+}
+.nav .nav-item .nav-link.active i:hover {
+    color: #17a2b8;
+}
+.leaderboard {
+    height:200px
+}
+.leader .container img {
+    max-width:150px;
+}
+.crown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+svg {
+    width: 3rem;
+}
+.leader:nth-child(1) {
+    color: black;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.leader:nth-child(1):after {
+     content: '1';
+     width: 30px;
+     height: 30px;
+     background: #ffc500;
+     border-radius: 50%;
+     position: absolute;
+     right: 0;
+     font-family: sans-serif;
+     text-align: center;
+     line-height: 30px;
+     font-weight: 700;
+ }
+.crown {
+    top: -20%;
+}
+svg {
+    fill: #ffc500;
+}
+.leader:nth-child(2) {
+    color: black;
+    position: absolute;
+    left: 15%;
+    transform: translateX(-15%);
+    bottom: -20%;
+}
+.leader:nth-child(2):after {
+     content: '2';
+     width: 30px;
+     height: 30px;
+     background: #d4d4d4;
+     border-radius: 50%;
+     position: absolute;
+     right: 0;
+     font-family: sans-serif;
+     text-align: center;
+     line-height: 30px;
+     font-weight: 700;
+ }
+.crown {
+    top: -25%;
+}
+svg {
+    fill: #d4d4d4;
+}
+.leader:nth-child(3) {
+    color: black;
+    position: absolute;
+    left: 85%;
+    transform: translateX(-85%);
+    bottom: -20%;
+}
+.leader:nth-child(3):after {
+     content: '3';
+     width: 30px;
+     height: 30px;
+     background: #ab6528;
+     border-radius: 50%;
+     position: absolute;
+     right: 0;
+     font-family: sans-serif;
+     text-align: center;
+     line-height: 30px;
+     font-weight: 700;
+ }
+.crown {
+    top: -25%;
+}
+svg {
+    fill: #ab6528;
+}
+
+
+

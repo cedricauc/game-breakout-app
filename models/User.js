@@ -8,6 +8,8 @@ const userSchema = new Schema({
   salt: { type: String, required: true },
   date: { type: Date, default: new Date().toString()},
   freeGameDate: { type: String, default: ""},  // user can play one free game per day
+  level: {type: Number, default: 1},
+  lives: {type: Number, default: 3},
   lastScore: {type: Number, default: 0},
   bestScore: {type: Number, default: 0}
 })

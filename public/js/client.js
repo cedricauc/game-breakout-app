@@ -30,7 +30,7 @@ let hue
 let timer
 let level
 
-const usernameInput = 'test'
+const usernameSpan = document.querySelector('#username')
 
 const gameCard = document.querySelector('#game-card')
 const notificationCard = document.querySelector('#notification-card')
@@ -38,14 +38,11 @@ const startArea = document.querySelector('#start-area')
 const restartArea = document.querySelector('#restart-area')
 const waitingArea = document.querySelector('#waiting-area')
 const notificationMsg = document.querySelector('#notification-message')
-
 const container = document.querySelector('.content--canvas')
 const liveText = document.querySelector('.live-text')
 const scoreText = document.querySelector('.score-text')
 const levelText = document.querySelector('.level-text')
 const timerText = document.querySelector('.timer-text')
-
-//const startGame = document.querySelector('#start-game')
 
 let canvas = {
   a: document.createElement('canvas'),
@@ -71,7 +68,7 @@ document.addEventListener('mousemove', mouseMoveHandler, false)
 
 $('#startGame').click(function (e) {
   e.preventDefault()
-  player.username = usernameInput
+  player.username = usernameSpan.textContent
   player.paddleX = paddleX
   player.paddleY = paddleY
 
@@ -91,7 +88,7 @@ $('#startGame').click(function (e) {
   socket.emit('playerData', player)
 })
 
-$('#restartGame').on('submit', function (e) {
+$('#restartGame').click(function (e) {
   e.preventDefault()
   restartArea.classList.add('d-none')
   notificationCard.classList.add('d-none')
@@ -102,7 +99,7 @@ $('#restartGame').on('submit', function (e) {
   socket.emit('play again', player)
 })
 
-$('#waitingGame').on('submit', function (e) {
+$('#nextGame').click(function (e) {
   e.preventDefault()
   waitingArea.classList.add('d-none')
   notificationCard.classList.add('d-none')
@@ -112,7 +109,6 @@ $('#waitingGame').on('submit', function (e) {
 
   socket.emit('next level', player)
 })
-
 
 socket.on('join room', (roomId) => {
   player.roomId = roomId
@@ -258,18 +254,10 @@ function drawBonuses() {
 }
 
 function drawScore() {
-  // ctx.a.font = '16px Arial'
-  // ctx.a.fillStyle = '#0095DD'
-  // ctx.a.fillText(`Score: ${score}`, 8, 20)
-
   scoreText.innerHTML= score
 }
 
 function drawLives() {
-  // ctx.a.font = '16px Arial'
-  // ctx.a.fillStyle = '#0095DD'
-  // ctx.a.fillText(`Lives: ${lives}`, canvas.a.width - 65, 20)
-
   liveText.innerHTML= lives
 }
 
@@ -278,7 +266,7 @@ function drawLevel() {
 }
 
 function drawTimer() {
-  timerText.innerHTML= Math.round(parseFloat(timer))
+  timerText.innerHTML= Math.round(parseFloat(timer)).toString()
 }
 
 function drawParticles() {

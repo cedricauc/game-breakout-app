@@ -9,7 +9,7 @@ const mongoose = require('mongoose')
 const db = require('./config/data').mongoURI
 const secret = require('./config/data').secret
 const helmet = require('helmet')
-
+const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 5000
 
 const routes = require('./routes/index')
@@ -19,14 +19,6 @@ const Game = require('./server/game.js')
 
 //Init app
 const app = express()
-
-const bodyParser = require("body-parser");
-const sessionMiddleware = session({ secret: "changeit", resave: false, saveUninitialized: false });
-app.use(sessionMiddleware);
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(passport.initialize());
-app.use(passport.session());
-
 
 //Security HTTP Headers
 app.use(
@@ -72,16 +64,18 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(express.static('public'))
 
-// Express session
-app.use(
-  session({
-    secret: secret,
-    resave: true,
-    saveUninitialized: true,
-    cookie: { secure: false },
-  }),
-)
+ const sessionMiddleware = session({
+   secret: secret,
+   resave: true,
+   saveUninitialized: true,
+   cookie: { secure: false },
+ });
 
+// Express session
+app.use(sessionMiddleware)
+// Node.js body parsing middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+// Middle-ware that initialises Passport
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -114,7 +108,7 @@ const User = require("./models/User");
 // convert a connect middleware to a Socket.IO middleware
 const wrap = middleware => (socket, next) => middleware(socket.request, {}, next);
 
-//middleware function with passport
+// middleware function with passport
 io.use(wrap(sessionMiddleware));
 io.use(wrap(passport.initialize()));
 io.use(wrap(passport.session()));
@@ -148,20 +142,23 @@ io.on('connection', (socket) => {
     let date = new Date().toDateString()
     const filter = { email: socket.request.user.username };
     const update = { freeGameDate: date };
-
     // update user freeGameDate to db
     User.findOneAndUpdate(filter, update).then((data) => {
       const currentUser =
           User.findOne(filter).then((data) => {
-            console.log(data)
+            //console.log(data)
           });
     });
 
     let room = null
 
     if (!player.roomId) {
-      room = createRoom(player)
-      //console.log(`[create room] - ${room.id} - ${player.username}`)
+      room = createRoom(
+          player,
+          socket.request.user.level,
+          socket.request.user.lives
+      )
+      console.log(`[create room] - ${room.id} - ${player.username}`)
     } else {
       room = rooms.find((r) => r.id === player.roomId)
 
@@ -258,6 +255,13 @@ io.on('connection', (socket) => {
       return
     }
 
+    // init params
+    const filter = { email: socket.request.user.username };
+    const update = { level: room.game.level + 1 };
+    // update user freeGameDate to db
+    User.findOneAndUpdate(filter, update).then((data) => {
+    });
+
     //Init Game
     room.game = new Game(
       room.game.level + 1,
@@ -296,18 +300,18 @@ io.on('connection', (socket) => {
   })
 })
 
-function createRoom(player) {
+function createRoom(player, level, lives) {
   const room = {
     id: roomId(),
     players: [],
     game: new Game(
-      1,
+      level,
       {
         paddleX: player.paddleX,
         paddleY: player.paddleY,
       },
       2,
-      2,
+      lives,
     ),
   }
   player.roomId = room.id

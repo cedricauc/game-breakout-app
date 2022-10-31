@@ -7,7 +7,14 @@ const User = require('../models/User')
 // Store user session
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    cb(null, { id: user.id, username: user.email, pseudo: user.username, date: user.freeGameDate })
+    cb(null, {
+      id: user.id,
+      username: user.email,
+      pseudo: user.username,
+      date: user.freeGameDate,
+      level: user.level,
+      lives: user.lives
+    })
   })
 })
 passport.deserializeUser(function (user, cb) {
