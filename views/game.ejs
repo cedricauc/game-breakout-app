@@ -69,7 +69,14 @@
                     <button class="btn btn-primary btn-lg" id="startGame">
                         JOUER
                     </button>
-                <% } %>
+                    <% } else {%>
+                        <form action="/shop" method="post">
+                            <% if(msg != "") {%>
+                                <p class="text-white"><%= msg  %></p>
+                            <% } %>
+                            <button class="btn btn-primary btn-lg">Boutique</button>
+                        </form>
+                    <% } %>
             </div>
 
             <!-- game area -->
