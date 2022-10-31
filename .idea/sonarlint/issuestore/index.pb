@@ -13,9 +13,6 @@ B
 server/vector.js,5\c\5ce7cf24f52bdf95279e81bc1a952a4f89b3db09
 C
 server/constants.js,7\0\700101fee8fb458f2858534feeb5e3a2662b5ba8
-:
-
-.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
 D
 server/levelMaker.js,2\d\2d5caed6b81a4783a9a52a23df62b3b2ee3a5741
 <
