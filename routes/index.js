@@ -17,15 +17,24 @@ router.get('/game', passport.authenticate('session'), async function(req, res) {
     flag = false
     msg = "Vous avez joué le jeu gratuit"
   } else msg = "Vous avez 1 jeu gratuit"
-  res.render('game', {user: req.user.pseudo, flag, msg, level: req.user.level, lives: req.user.lives,});
+  res.render('game', {user: req.user.pseudo, flag, msg, level: req.user.level, lives: req.user.lives, points: req.user.points});
 });
 
 router.post('/shop', passport.authenticate('session'), async function(req, res) {
-  res.render('shop', {user: req.user.pseudo});
-});
+  let points = req.user.points -5
+  let games = req.user.gamesNbr +1
+  const filter = { email: req.user.username };
+  const update = { credit: points, gamesNbr: games };
+  await User.findOneAndUpdate(filter, update)
+  const currentUser = await User.findOne(filter)
+  req.user.points = currentUser.credit
+  req.user.gamesNbr = currentUser.gamesNbr
+  res.render('shop', {user: req.user.pseudo, points: req.user.points, gamesNbr: req.user.gamesNbr});
+})
+
 
 router.get('/shop', passport.authenticate('session'), async function(req, res) {
-  res.render('shop', {user: req.user.pseudo});
+  res.render('shop', {user: req.user.pseudo, points: req.user.points, gamesNbr: req.user.gamesNbr});
 });
 
 router.get('/trophy', passport.authenticate('session'), async function(req, res) {

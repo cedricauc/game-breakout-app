@@ -1,8 +1,21 @@
-<div class="container">
-    <h2 class="text-white">Boutique</h2>
+<div class="container text-white">
+    <h2>Boutique</h2>
     <% if(user) { %>
         <h2 class="mt-4">Bienvenue, <%= user %> !</h2>
+        <p class="mt-4">Points disponibles : <%= points %></p>
+        <p>Jeux disponibles : <%= gamesNbr %></p>   
     <% } %>
+    <div class="card" style="width: 18rem;">
+        <p class="card-text text-black">Jeu : 5 points</p>
+        <% if(points >= 5) {%>
+        <form action="/shop" method="post">
+            <button class="btn btn-primary btn-block mt-2 mb-2">Utiliser les points</button>
+        </form>
+        <% } %>
+            <form action="#" method="post">
+                <button class="btn btn-primary btn-block mt-2 mb-2">Acheter des points</button>
+            </form>
+    </div>
     <form action="/game" method="get">
         <button class="btn btn-secondary btn-block mt-2 mb-2">Jouer</button>
     </form>

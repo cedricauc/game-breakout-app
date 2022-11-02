@@ -16,6 +16,8 @@ passport.serializeUser(function (user, cb) {
       lives: user.lives,
       bestScore: user.bestScore,
       timePlay: user.timePlay,
+      points: user.credit,
+      gamesNbr: user.gamesNbr
     })
   })
 })
