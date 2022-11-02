@@ -11,7 +11,8 @@ const userSchema = new Schema({
   level: {type: Number, default: 1},
   lives: {type: Number, default: 3},
   lastScore: {type: Number, default: 0},
-  bestScore: {type: Number, default: 0}
+  bestScore: {type: Number, default: 0},
+  timePlay: {type: Number, default: 0}
 })
 
 userSchema.methods.setPassword = function (password) {

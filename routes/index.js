@@ -29,14 +29,19 @@ router.get('/shop', passport.authenticate('session'), async function(req, res) {
 });
 
 router.get('/trophy', passport.authenticate('session'), async function(req, res) {
-  // Modify DB
-  //console.log('route get ', req.user.pseudo);
+  let allUsers = await User.find({}, { username: 1, bestScore: 1, timePlay: 1 }).sort( { bestScore: -1 });
+
   let today = new Date().toDateString()
   let flag = true
   if(today == req.user.date) {
     flag = false
   }
-  res.render('trophy', {user: req.user.pseudo, level: req.user.level, lives: req.user.lives,  flag: flag});
+  res.render('trophy', {
+    user: req.user.pseudo,
+    level: req.user.level,
+    lives: req.user.lives,
+    flag: flag,
+    allUsers: allUsers});
 });
 
 router.post('/home', passport.authenticate('session'), async function(req, res) {

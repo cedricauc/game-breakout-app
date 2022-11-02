@@ -219,6 +219,18 @@ io.on('connection', (socket) => {
   socket.on('play again waiting area', (player) => {
     const room = rooms.find((r) => r.id === player.roomId)
 
+    // init params
+    const bestScore = room.game.score > socket.request.user.bestScore ? room.game.score : socket.request.user.bestScore;
+    const filter = { email: socket.request.user.username };
+    const update = {
+      lastScore: room.game.score,
+      bestScore: socket.request.user.bestScore,
+      timePlay: socket.request.user.timePlay + Math.round(parseFloat(room.game.timer)).toString()
+    };
+    // update user bestScore to db
+    User.findOneAndUpdate(filter, update).then((data) => {
+    });
+
     io.to(room.id).emit('play again waiting area', room.players)
   })
 
@@ -256,9 +268,15 @@ io.on('connection', (socket) => {
     }
 
     // init params
+    const bestScore = room.game.score > socket.request.user.bestScore ? room.game.score : socket.request.user.bestScore;
     const filter = { email: socket.request.user.username };
-    const update = { level: room.game.level + 1 };
-    // update user freeGameDate to db
+    const update = {
+      level: room.game.level + 1,
+      lastScore: room.game.score,
+      bestScore: bestScore,
+      timePlay: socket.request.user.timePlay + Math.round(parseFloat(room.game.timer)).toString()
+    };
+    // update user bestScore to db
     User.findOneAndUpdate(filter, update).then((data) => {
     });
 
