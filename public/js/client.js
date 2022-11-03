@@ -51,10 +51,11 @@ let canvas = {
 canvas.a.width = 720
 canvas.a.height = 480
 canvas.a.style = `
-        display: block;
-		// width: 100%;
-		// height: 100%;
-		background-color:#343a40;
+         display: block;
+		 width: 100%;
+		 height: 100%;
+		 box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+		 background-color:#1b1b1b;
 	`
 container.appendChild(canvas.a)
 let ctx = {
@@ -148,10 +149,11 @@ socket.on('play again waiting area', () => {
 })
 
 function mouseMoveHandler(e) {
-  let relativeX = e.clientX - canvas.a.getBoundingClientRect().left
+  const relativeX = (e.clientX - canvas.a.getBoundingClientRect().left) * e.target.width  / canvas.a.clientWidth;
+
   if (
-      relativeX > 0 &&
-      relativeX < canvas.a.width
+      relativeX > (paddleWidth / 2) &&
+      relativeX < canvas.a.width - (paddleWidth / 2)
   ) {
     player.paddleX = relativeX - paddleWidth / 2
   }
@@ -279,6 +281,7 @@ function drawParticles() {
 function draw() {
   ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
 
+  drawParticles()
   drawBricks()
   drawBalls()
   drawBonuses()
@@ -287,7 +290,6 @@ function draw() {
   drawLives()
   drawLevel()
   drawTimer()
-  drawParticles()
 
   socket.emit('collision detection', player)
 }

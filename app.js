@@ -128,7 +128,7 @@ let rooms = []
  * @type {Socket}
  */
 io.on('connection', (socket) => {
-  //console.log(`[connection] ${socket.id}`)
+  console.log(`[connection] ${socket.id}`)
 
   // set socket.io session
   const session = socket.request.session;
@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
           socket.request.user.level,
           socket.request.user.lives
       )
-      console.log(`[create room] - ${room.id} - ${player.username}`)
+      //console.log(`[create room] - ${room.id} - ${player.username}`)
     } else {
       room = rooms.find((r) => r.id === player.roomId)
 
@@ -225,7 +225,7 @@ io.on('connection', (socket) => {
     const update = {
       lastScore: room.game.score,
       bestScore: socket.request.user.bestScore,
-      timePlay: socket.request.user.timePlay + Math.round(parseFloat(room.game.timer)).toString()
+      timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString()
     };
     // update user bestScore to db
     User.findOneAndUpdate(filter, update).then((data) => {
@@ -267,22 +267,23 @@ io.on('connection', (socket) => {
       return
     }
 
+    const level = room.game.level < 12 ? room.game.level + 1 : 1;
+
     // init params
     const bestScore = room.game.score > socket.request.user.bestScore ? room.game.score : socket.request.user.bestScore;
     const filter = { email: socket.request.user.username };
     const update = {
-      level: room.game.level + 1,
+      level: level,
       lastScore: room.game.score,
       bestScore: bestScore,
-      timePlay: socket.request.user.timePlay + Math.round(parseFloat(room.game.timer)).toString()
+      timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString()
     };
     // update user bestScore to db
-    User.findOneAndUpdate(filter, update).then((data) => {
-    });
+    User.findOneAndUpdate(filter, update).then((data) => {});
 
     //Init Game
     room.game = new Game(
-      room.game.level + 1,
+      level,
       {
         paddleX: player.paddleX,
         paddleY: player.paddleY,

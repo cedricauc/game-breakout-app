@@ -1,13 +1,13 @@
 <%- include('./partials/nav', {flag:flag, lives:lives, level:level, action:'game'}) %>
 <!-- section -->
-<section class="bg-transparent">
+<section class="bg-transparent" id="section-game">
     <div class="position-relative my-5 mx-5 h-75">
-        <div class="d-flex justify-content-center align-items-center flex-column h-75">
+        <div class="d-flex justify-content-center align-items-center flex-column h-100">
             <!-- start area-->
             <div class="d-flex align-content-center flex-wrap mb-3" id="start-area">
                 <% if (flag) { %>
                     <button class="btn btn-primary btn-lg" id="startGame">
-                        JOUER
+                        START
                     </button>
                     <% } else {%>
                         <form action="/shop" method="get">
@@ -29,7 +29,7 @@
 
                 <div class="d-flex justify-content-center">
                     <button class="btn btn-primary btn-lg" id="restartGame">
-                        REJOUER
+                        RESTART
                     </button>
                 </div>
 

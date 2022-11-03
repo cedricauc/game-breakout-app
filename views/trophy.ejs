@@ -1,7 +1,7 @@
 <%- include('./partials/nav', {flag:flag, lives:lives, level:level, action:'trophy'}) %>
 <!-- section -->
-<section class="bg-transparent">
-    <% if(allUsers.length > 3) { %>
+<section class="bg-transparent" id="section-trophy">
+    <% if(allUsers.length >= 3) { %>
         <div class="position-relative my-5 mx-5 leaderboard">
             <div class="d-flex pb-4">
                 <div class="d-flex leader">
@@ -59,11 +59,16 @@
             </thead>
             <tbody>
             <% allUsers.forEach((itr, index) => { %>
+                <%
+                    let minutes = Math.floor(itr.timePlay / 60);
+                    minutes = minutes < 10 ? "0" + minutes : minutes;
+ %>
+
                 <tr>
                     <th scope="row"><%= index + 1 %></th>
                     <td><%= itr.username %></td>
                     <td><%= itr.bestScore %></td>
-                    <td><%= itr.timePlay %></td>
+                    <td><%= minutes %></td>
                 </tr>
             <% }) %>
             </tbody>
