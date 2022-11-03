@@ -8,23 +8,16 @@ router.get('/', function(req, res) {
 });
 
 router.get('/game', passport.authenticate('session'), async function(req, res) {
-  // Modify DB
-  //console.log('route get ', req.user.pseudo);
-  let today = new Date().toDateString()
-  let flag = true
-  let msg = ""
-  if(today == req.user.date) {
-    flag = false
-    msg = "Vous avez joué le jeu gratuit"
-  } else msg = "Vous avez 1 jeu gratuit"
+  const freeGameNotification = hasFreeGame(req.user.date)
+
   res.render('game', {
     user: req.user.pseudo,
     level: req.user.level,
     lives: req.user.lives,
     points: req.user.points,
     gamesNbr: req.user.gamesNbr,
-    flag,
-    msg,
+    flag: freeGameNotification.flag,
+    msg : freeGameNotification.msg,
   });
 });
 
@@ -38,60 +31,63 @@ router.post('/shop', passport.authenticate('session'), async function(req, res) 
   req.user.points = currentUser.credit
   req.user.gamesNbr = currentUser.gamesNbr
 
-  let today = new Date().toDateString()
-  let flag = true
-  let msg = ""
-  if(today == req.user.date) {
-    flag = false
-    msg = "Vous avez joué le jeu gratuit"
-  } else msg = "Vous avez 1 jeu gratuit"
+  const freeGameNotification = hasFreeGame(req.user.date)
+
   res.render('shop', {
     user: req.user.pseudo,
-    flag: flag,
-    msg : msg,
+    level: req.user.level,
+    lives: req.user.lives,
     points: req.user.points,
-    gamesNbr: req.user.gamesNbr});
+    gamesNbr: req.user.gamesNbr,
+    flag: freeGameNotification.flag,
+    msg : freeGameNotification.msg,
+  });
 })
 
-
 router.get('/shop', passport.authenticate('session'), async function(req, res) {
-  let today = new Date().toDateString()
-  let flag = true
-  let msg = ""
-  if(today == req.user.date) {
-    flag = false
-    msg = "Vous avez joué le jeu gratuit"
-  } else msg = "Vous avez 1 jeu gratuit"
+  const freeGameNotification = hasFreeGame(req.user.date)
+
   res.render('shop', {
     user: req.user.pseudo,
     points: req.user.points,
     level: req.user.level,
     lives: req.user.lives,
     gamesNbr: req.user.gamesNbr,
-    flag: flag,
-    msg : msg,
+    flag: freeGameNotification.flag,
+    msg : freeGameNotification.msg,
   });
 });
 
 router.get('/trophy', passport.authenticate('session'), async function(req, res) {
-  let allUsers = await User.find({}, { username: 1, bestScore: 1, timePlay: 1 }).sort( { bestScore: -1 });
+  const allUsers = await User.find({}, { username: 1, bestScore: 1, timePlay: 1 }).sort( { bestScore: -1 });
 
-  let today = new Date().toDateString()
-  let flag = true
-  if(today == req.user.date) {
-    flag = false
-  }
+  const freeGameNotification = hasFreeGame(req.user.date)
+
   res.render('trophy', {
     user: req.user.pseudo,
+    points: req.user.points,
     level: req.user.level,
     lives: req.user.lives,
     gamesNbr: req.user.gamesNbr,
-    flag: flag,
+    flag: freeGameNotification.flag,
+    msg : freeGameNotification.msg,
     allUsers: allUsers});
 });
 
 router.post('/home', passport.authenticate('session'), async function(req, res) {
   res.render('dashboard', {user: req.user.pseudo});
 });
+
+function hasFreeGame(dt) {
+  let today = new Date().toDateString()
+  let flag = true
+  let msg = ""
+  if(today === dt) {
+    flag = false
+    msg = "Vous avez joué le jeu gratuit"
+  } else msg = "Vous avez 1 jeu gratuit"
+
+  return {flag, msg}
+}
 
 module.exports = router;

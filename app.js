@@ -140,8 +140,6 @@ io.on('connection', (socket) => {
 
   socket.on('playerData', (player) => {
 
-    // init params
-    let date = new Date().toDateString()
     const filter = { email: socket.request.user.username };
     const update = { freeGameDate: date, gamesNbr: socket.request.user.gamesNbr};
     // update user freeGameDate to db
@@ -221,19 +219,15 @@ io.on('connection', (socket) => {
   })
 
   socket.on('play again waiting area', (player) => {
-    console.log(`[play again waiting area] - ${player.username}`)
+    //console.log(`[play again waiting area] - ${player.username}`)
     const room = rooms.find((r) => r.id === player.roomId)
 
-    //console.log('numbrs2', socket.request.user.gamesNbr)
     const filter = { email: socket.request.user.username };
 
     const bestScore = room.game.score > socket.request.user.bestScore ? room.game.score : socket.request.user.bestScore;
 
-    const freeGameDateUsed = socket.request.user.freeGameDateUsed
-    console.log('is used:',freeGameDateUsed !== socket.request.user.freeGameDate)
-
-    // if free game date is not used
-    if (freeGameDateUsed !== socket.request.user.freeGameDate) {
+    // if free game is not used
+    if (socket.request.user.freeGameDateUsed !== socket.request.user.freeGameDate) {
       const update = {
         lastScore: room.game.score,
         bestScore: bestScore,
@@ -241,34 +235,35 @@ io.on('connection', (socket) => {
         freeGameDateUsed: date
       }
 
+      // update db
       User.findOneAndUpdate(filter, update).then((data) => {
         //console.log('cb', data.gamesNbr)
       });
 
       io.to(room.id).emit('play again waiting area', room.players)
-
     }
     else
     {
-      // if player can restart
+      // if player has purchase game
       if (socket.request.user.gamesNbr > 1) {
-        // update user bestScore to db
-        const nbrs = socket.request.user.gamesNbr - 1
 
-        socket.request.user.gamesNbr = nbrs
-        // init params
+        // get user available purchase game
+        const gamesNbr = socket.request.user.gamesNbr - 1
+        socket.request.user.gamesNbr = gamesNbr
         const update = {
           lastScore: room.game.score,
           bestScore: bestScore,
           timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString(),
-          gamesNbr: nbrs
+          gamesNbr: gamesNbr
         };
+        // update db
         User.findOneAndUpdate(filter, update).then((data) => {
           //console.log('cb', data.gamesNbr)
         });
 
         io.to(room.id).emit('play again waiting area', room.players)
       }
+      // if user has no more purchase game
       else {
         socket.request.user.gamesNbr = 0
 
@@ -278,7 +273,7 @@ io.on('connection', (socket) => {
           timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString(),
           gamesNbr: 0
         };
-        // update user bestScore to db
+        // update to db
         User.findOneAndUpdate(filter, update).then((data) => {});
 
         io.to(room.id).emit('waiting area', room.players)
@@ -289,7 +284,7 @@ io.on('connection', (socket) => {
   socket.on('play again', (player) => {
     const room = rooms.find((r) => r.id === player.roomId)
 
-    //Init Game
+    // init Game
     room.game = new Game(
       room.game.level,
       {
