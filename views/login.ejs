@@ -1,0 +1,38 @@
+<div class="clearfix"></div>
+<div class="container my-auto">
+    <div class="row mb-5">
+        <div class="col-md-4 m-auto">
+            <div class="card card-body text-center text-bg-dark mb-5">
+                <h2 class="text-center mb-3"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</h2>
+                <% if(error != ''){ %>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <%= error %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                <% } %>
+                <form action="/users/login" method="post">
+                    <div>
+                        <label for="email" class="form-label">Email</label>
+                        <input class="form-control"
+                               id="email"
+                               name="email"
+                               type="email"
+                               required autofocus>
+                    </div>
+                    <div>
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input class="form-control"
+                               id="password"
+                               name="password"
+                               type="password"
+                               required autofocus>
+                    </div>
+                    <button type="submit" class="btn btn-lg btn-primary form-control mt-3 ">S'identifier</button>
+                </form>
+                <p class="mt-4">Vous n'avez pas de compte? <a class="link-light" href="/users/register"> S'inscrire</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+

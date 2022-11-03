@@ -1,0 +1,62 @@
+<!-- navigation -->
+<nav class="bg-primary">
+    <div class="row ps-md-5 mt-3">
+        <div class="col-12">
+            <h5 class="float-right ps-4 pt-1 mb-0 text-light">
+                Bienvenue <span class="badge bg-dark p-1 px-2 pb-2 text-info" id="username"><%= user %></span>
+                <% if (flag) { %>
+                    <span class="font-weight-light">1 jeu gratuit</span>
+                <% }  %>
+                <% if (flag) { %>
+                    <span class="font-weight-light"> | Jeux achetés : <%= gamesNbr  %></span>
+                <% }  %>
+            </h5>
+        </div>
+    </div>
+    <div class="row ps-md-5 mb-3">
+        <!-- link -->
+        <div class="col-12 col-md-5">
+            <div class="p-4">
+                <ul class="nav d-flex justify-content-between">
+                    <li class="nav-item">
+                        <a class="nav-link <%= action === 'game' ? 'active' : '' %> text-black" href="/game">
+                            <i class="fa-solid fa-home"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= action === 'game' ? 'shop' : '' %> text-black" href="/shop">
+                            <i class="fa-solid fa-shopping-cart"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= action === 'trophy' ? 'active' : '' %> text-black" href="/trophy">
+                            <i class="fa-solid fa-trophy"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- stats -->
+        <div class="col-12 offset-md-1 col-md-6">
+            <div class="d-flex justify-content-around flex-row">
+                <div class="d-flex ps-md-5 pe-md-5 w-100 align-items-start flex-column m-2">
+                    <div class="mb-2 p-2 w-100 bg-light">
+                        <div class="fw-bold">Lives: <span class="live-text"><%= lives %></span></div>
+                    </div>
+                    <div class="mb-2 p-2 w-100 bg-light">
+                        <div class="fw-bold">Score: <span class="score-text"></span></div>
+                    </div>
+                </div>
+                <div class="d-flex ps-md-5 pe-md-5 w-100 align-items-start flex-column m-2">
+                    <div class="mb-2 p-2  w-100 bg-light">
+                        <div class="fw-bold">Level: <span class="level-text"><%= level %></span></div>
+                    </div>
+                    <div class=" mb-2 p-2 w-100 bg-light">
+                        <div class="fw-bold">Time: <span class="timer-text"></span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</nav>
