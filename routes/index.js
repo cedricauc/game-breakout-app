@@ -17,6 +17,8 @@ router.get('/game', passport.authenticate('session'), async function(req, res) {
     flag = false
     msg = "Vous avez joué le jeu gratuit"
   } else msg = "Vous avez 1 jeu gratuit"
+
+  flag = true
   res.render('game', {user: req.user.pseudo, flag, msg, level: req.user.level, lives: req.user.lives,});
 });
 
