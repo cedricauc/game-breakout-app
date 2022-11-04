@@ -1,0 +1,167 @@
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+* {
+    box-sizing: inherit;
+}
+
+#root {
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+}
+
+.cover {
+    background: url('../assets/cover.png') no-repeat center center/cover;
+}
+
+nav {
+    background: url('../assets/overlay1296x158.png') no-repeat;
+    background-size: 100% 100%;
+}
+
+@media (max-width: 768px) {
+    nav {
+        background: url('../assets/overlay350x280.png') no-repeat;
+        background-size: 100% 100%;
+    }
+}
+
+.nav .nav-item .nav-link i {
+    color: #343a40;
+    font-size: 2.2rem;
+}
+
+.nav .nav-item .nav-link.active i {
+    color: #17a2b8;
+    font-size: 2.2rem;
+}
+
+.nav .nav-item .nav-link i:hover {
+    color: #ffc107;
+}
+
+.nav .nav-item .nav-link.active i:hover {
+    color: #17a2b8;
+}
+
+#section-game {
+    background-color: red;
+}
+
+.leaderboard {
+    height: 200px
+}
+
+.leader .container img {
+    max-width: 150px;
+}
+
+.crown {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.crown svg {
+    width: 3rem;
+}
+
+.leader:nth-child(1) {
+    color: black;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.leader:nth-child(1):after {
+    content: '1';
+    width: 30px;
+    height: 30px;
+    background: #ffc500;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+}
+
+.crown {
+    top: -20%;
+}
+
+.crown svg {
+    fill: #ffc500;
+}
+
+.leader:nth-child(2) {
+    color: black;
+    position: absolute;
+    left: 15%;
+    transform: translateX(-15%);
+    bottom: -20%;
+}
+
+.leader:nth-child(2):after {
+    content: '2';
+    width: 30px;
+    height: 30px;
+    background: #d4d4d4;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+}
+
+.crown .crown {
+    top: -25%;
+}
+
+.crown svg {
+    fill: #d4d4d4;
+}
+
+.leader:nth-child(3) {
+    color: black;
+    position: absolute;
+    left: 85%;
+    transform: translateX(-85%);
+    bottom: -20%;
+}
+
+.leader:nth-child(3):after {
+    content: '3';
+    width: 30px;
+    height: 30px;
+    background: #ab6528;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    font-family: sans-serif;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+}
+
+.crown {
+    top: -25%;
+}
+
+.crown svg {
+    fill: #ab6528;
+}
+
+

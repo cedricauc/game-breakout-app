@@ -1,6 +1,18 @@
-<h1 class="mt-4">Dashboard</h1>
+<div class="container">
+    <h2 class="mt-4 text-white">Dashboard</h2>
+    <% if(user) { %>
+        <h2 class="mt-4">Bonjour, <%= user %></h2>
+    <% } %>
 
-<a href="/game" class="btn btn-secondary">Game</a>
-<form action="/users/logout" method="post">
-    <button class="btn btn-secondary">Logout</button>
-</form>
+
+    <!-- <a href="/game" class="btn btn-primary btn-block mb-3">Game</a> -->
+    <form action="/game" method="get">
+        <button class="btn btn-secondary btn-block">Jouer</button>
+    </form>
+    <form action="/shop" method="post">
+        <button class="btn btn-secondary btn-block mt-2 mb-2">Boutique</button>
+    </form>
+    <form action="/users/logout" method="post">
+        <button class="btn btn-secondary btn-block">Se déconnecter</button>
+    </form>
+</div>

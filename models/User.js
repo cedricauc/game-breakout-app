@@ -6,7 +6,16 @@ const userSchema = new Schema({
   email: { type: String, unique: true, required: true },
   hash: { type: String, required: true },
   salt: { type: String, required: true },
-  // date: { type: Date, default: Date.now()}
+  date: { type: Date, default: new Date().toString()},
+  freeGameDate: { type: String, default: ""},  // user can play one free game per day
+  freeGameDateUsed: { type: String, default: ""},  // whether user played free game
+  level: {type: Number, default: 1},
+  lives: {type: Number, default: 3},
+  lastScore: {type: Number, default: 0},
+  bestScore: {type: Number, default: 0},
+  timePlay: {type: Number, default: 0},
+  credit: {type: Number, default: 0},
+  gamesNbr: {type: Number, default: 0}
 })
 
 userSchema.methods.setPassword = function (password) {

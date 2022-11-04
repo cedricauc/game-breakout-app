@@ -3,12 +3,22 @@ const router = express.Router()
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/User')
-const crypto = require('crypto')
 
 // Store user session
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
-    cb(null, { id: user.id, username: user.username })
+    cb(null, {
+      id: user.id,
+      username: user.email,
+      pseudo: user.username,
+      date: user.freeGameDate,
+      level: user.level,
+      lives: user.lives,
+      bestScore: user.bestScore,
+      timePlay: user.timePlay,
+      points: user.credit,
+      gamesNbr: user.gamesNbr
+    })
   })
 })
 passport.deserializeUser(function (user, cb) {
@@ -19,41 +29,37 @@ passport.deserializeUser(function (user, cb) {
 
 // Define strategy method for authentification
 passport.use(
-  new LocalStrategy({usernameField: 'email'}, function (username, password, cb) {
-    // Find user with requested email
-    User.findOne({ email: username }).then((user) => {
-      if (!user) {
-        console.log('not found')
-        return cb(null, false, { message: 'User not found.' })
-      }
-      if (!user.validPassword(password)) {
-        console.log('pass not valid')
-        return cb(null, false, { message: 'Incorrect username or password.' })
-      }
-      return cb(null, user)
-    })
-  }),
+    new LocalStrategy({usernameField: 'email'}, function (username, password, cb) {
+      // Find user with requested email
+      User.findOne({ email: username }).then((user) => {
+        if (!user) {
+          return cb(null, false, { message: 'User not found.' })
+        }
+        if (!user.validPassword(password)) {
+          return cb(null, false, { message: 'Incorrect username or password.' })
+        }
+        return cb(null, user)
+      })
+    }),
 )
 
 router.get('/login', function (req, res) {
   res.render('login')
 })
 
-router.post(
-  '/login',
-  passport.authenticate('local', {
-   failureRedirect: '/users/login'
-  }),
-  function (req, res) {
-    res.redirect('/home')
-  },
-)
+router.post('/login',
+    passport.authenticate('local', {
+      successRedirect: '/game',
+      failureRedirect: '/users/login',
+      failureFlash: true
+    }))
 
 router.post('/logout', function (req, res, next) {
   req.logout(function (err) {
     if (err) {
       return next(err)
     }
+    req.flash('success_msg', 'Vous êtes déconnecté')
     res.redirect('/')
   })
 })
