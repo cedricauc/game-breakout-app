@@ -7,7 +7,7 @@
     "start": "nodemon app.js",
     "dev": "nodemon app.js"
   },
-  "author": "ip",
+  "author": "Cedric Auclair, Irina Pogartsev",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "*",
