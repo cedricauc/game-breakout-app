@@ -46,6 +46,10 @@ router.post('/shop', passport.authenticate('session'), async function(req, res) 
 
 router.get('/shop', passport.authenticate('session'), async function(req, res) {
   const freeGameNotification = hasFreeGame(req.user.date)
+  
+  const filter = { email: req.user.username };
+  const user = await User.findOne(filter)
+  req.user.gamesNbr = user.gamesNbr
 
   res.render('shop', {
     user: req.user.pseudo,

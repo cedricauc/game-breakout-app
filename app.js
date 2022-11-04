@@ -265,16 +265,17 @@ io.on('connection', (socket) => {
       }
       // if user has no more purchase game
       else {
-        socket.request.user.gamesNbr = 0
-
+        const gamesNbr = socket.request.user.gamesNbr - 1
+        socket.request.user.gamesNbr = gamesNbr
         const update = {
           lastScore: room.game.score,
           bestScore: bestScore,
           timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString(),
-          gamesNbr: 0
+          gamesNbr: gamesNbr
         };
         // update to db
-        User.findOneAndUpdate(filter, update).then((data) => {});
+        User.findOneAndUpdate(filter, update).then((data) => {
+        });
 
         io.to(room.id).emit('waiting area', room.players)
       }

@@ -3,9 +3,13 @@
     <!-- row -->
     <div class="row ps-md-5 mt-3">
         <div class="col-12">
-            <h5 class="float-right ps-4 pt-1 mb-0 text-light">
-                Bienvenue <span class="badge bg-dark p-1 px-2 pb-2 text-info" id="username"><%= user %></span>
+            <form action="/users/logout" method="post" class="float-start ps-4 pt-1 me-1">
+                <button class="p-0 btn btn-outline-info btn-block"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </form>
+            <h5 class="float-start ps-1 pt-1 mb-0 text-light">
+            Bienvenue <span class="badge bg-dark p-1 px-2 pb-2 text-info" id="username"><%= user %></span>
                 <% if (flag) { %>
+                    <span class="font-weight-light"> | </span>
                     <span class="font-weight-light">1 jeu gratuit</span>
                 <% }  %>
                 <span class="font-weight-light"> | </span>

@@ -100,7 +100,7 @@ class Game {
                             this.score += brick.tier
 
                             // randomly init bonus
-                            if (getRandom(2)) {
+                            if (getRandom(3)) {
                                 this.spawnBonus(brick.x, brick.y)
                             }
 

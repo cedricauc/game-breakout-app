@@ -6,18 +6,18 @@
             <!-- start area-->
             <% if (flag || gamesNbr > 0) { %>
                 <div class="d-flex align-content-center flex-wrap mb-3" id="start-area">
-                    <button class="btn btn-primary btn-lg" id="startGame">
+                    <button class="btn btn-dark btn-lg p-2 text-info" id="startGame">
                         START
                     </button>
                 </div>
             <% } else { %>
                 <div class="d-flex align-content-center flex-wrap mb-3" id="shop-card">
-                    <div class="d-flex justify-content-center">
-                        <form action="/shop" method="get">
+                    <div class="d-flex flex-row">
+                        <form action="/shop" method="get" class="d-flex flex-column">
                             <% if(msg != "") {%>
-                                <p class="text-white"><%= msg  %></p>
+                                <p class="text-white mb-5"><%= msg  %></p>
                             <% } %>
-                            <button class="btn btn-primary btn-lg">Boutique</button>
+                            <button class="btn btn-dark btn-lg p-2 text-info">Boutique</button>
                         </form>
                     </div>
                 </div>
@@ -29,24 +29,20 @@
 
             <!-- restart area-->
             <div class="d-none d-flex align-content-center flex-wrap mb-3" id="restart-area">
-
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary btn-lg" id="restartGame">
+                    <button class="btn btn-dark btn-lg p-2 text-info" id="restartGame">
                         RESTART
                     </button>
                 </div>
-
             </div>
 
             <!-- waiting area-->
             <div class="d-none d-flex align-content-center flex-wrap mb-3" id="waiting-area">
-
                 <div class="d-flex justify-content-center">
-                    <button class="btn btn-primary btn-lg" id="nextGame">
+                    <button class="btn btn-dark btn-lg p-2 text-info" id="nextGame">
                         CONTINUER
                     </button>
                 </div>
-
             </div>
 
             <!-- notification -->
@@ -56,9 +52,9 @@
 
             <!-- boutique -->
             <div class="d-none d-flex align-content-center flex-wrap mb-3" id="shop-card">
-                <div class="d-flex justify-content-center">
-                    <form action="/shop" method="get">
-                        <button class="btn btn-primary btn-lg">Boutique</button>
+                <div class="d-flex flex-row">
+                    <form action="/shop" method="get" class="d-flex flex-column">
+                        <button class="btn btn-dark btn-lg p-2 text-info">Boutique</button>
                     </form>
                 </div>
             </div>
