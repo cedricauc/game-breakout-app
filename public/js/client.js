@@ -13,25 +13,17 @@ const queryString = window.location.search
 const urlParams = new URLSearchParams(queryString)
 const roomId = urlParams.get('room')
 
-const brickRowCount = 8
-const brickColumnCount = 8
-
-let paddles = []
-let bricks = []
-let balls = []
-let bonuses = []
-let particles = []
-let score
-let lives
 let paddleWidth = 75
 let paddleHeight = 20
 let done = true
-let hue
-let timer
+
+let score
+let lives
 let level
+let timer
+let dataURL
 
 const usernameSpan = document.querySelector('#username')
-
 const gameCard = document.querySelector('#game-card')
 const notificationCard = document.querySelector('#notification-card')
 const startArea = document.querySelector('#start-area')
@@ -43,7 +35,6 @@ const liveText = document.querySelector('.live-text')
 const scoreText = document.querySelector('.score-text')
 const levelText = document.querySelector('.level-text')
 const timerText = document.querySelector('.timer-text')
-
 const shopCard = document.querySelector('#shop-card')
 
 let canvas = {
@@ -119,25 +110,18 @@ socket.on('join room', (roomId) => {
   player.paddleY = paddleY
 })
 
-socket.on('play', (player, game) => {
-  paddles = game.paddles
-  bricks = game.bricks
-  balls = game.balls
-  bonuses = game.bonuses
-  particles = game.particles
-  lives = game.lives
-  score = game.score
-  paddleWidth = game.paddleWidth
-  paddleHeight = game.paddleHeight
-  hue = game.hue
-  timer = game.timer
-  level = game.level
+socket.on('play', (_score, _lives, _level, _timer, _win, _dataURL) => {
+  score = _score
+  lives = _lives
+  level = _level
+  timer = _timer
+  dataURL = _dataURL
 
-  if (game.win) {
+  if (_win) {
     showWaitingArea()
   }
 
-  if (!game.lives) {
+  if (!_lives) {
     showRestartArea()
   }
 
@@ -204,101 +188,19 @@ function setNotificationMessage(classToRemove, classToAdd, html) {
   notificationMsg.innerHTML = html
 }
 
-function drawSprite(sprite) {
-  ctx.a.save()
-  ctx.a.translate(
-      sprite.position.x + sprite.width / 2,
-      sprite.position.y + sprite.height / 2,
-  )
-  ctx.a.rotate(sprite.rotation)
-  ctx.a.translate(
-      -sprite.position.x - sprite.width / 2,
-      -sprite.position.y - sprite.height / 2,
-  )
-  ctx.a.globalAlpha = sprite.opacity
-
-  ctx.a.scale(sprite.scale, sprite.scale)
-
-  const image = new Image()
-  image.src = sprite.src
-
-  ctx.a.drawImage(
-      image,
-      sprite.frames.val * (image.width / sprite.frames.max),
-      0,
-      image.width / sprite.frames.max,
-      image.height,
-      sprite.position.x,
-      sprite.position.y,
-      sprite.width,
-      sprite.height,
-  )
-  ctx.a.restore()
-}
-
-function drawBalls() {
-  balls.forEach((ball) => {
-    drawSprite(ball.sprite)
-  })
-}
-
-function drawPaddle() {
-  paddles.forEach((paddle) => {
-    drawSprite(paddle.sprite)
-  })
-}
-
-function drawBricks() {
-  for (let c = 0; c < brickColumnCount; c++) {
-    for (let r = 0; r < brickRowCount; r++) {
-      if (bricks[c][r].status > 0) {
-        drawSprite(bricks[c][r].sprite)
-      }
-    }
-  }
-}
-
-function drawBonuses() {
-  bonuses.forEach((bonus) => {
-    drawSprite(bonus.sprite)
-  })
-}
-
-function drawScore() {
-  scoreText.innerHTML= score
-}
-
-function drawLives() {
-  liveText.innerHTML= lives
-}
-
-function drawLevel() {
-  levelText.innerHTML= level
-}
-
-function drawTimer() {
-  timerText.innerHTML= Math.round(parseFloat(timer)).toString()
-}
-
-function drawParticles() {
-  ctx.a.fillStyle = `hsla(${hue}, 50%, 50%, 1)`
-  particles.forEach((p) => {
-    ctx.a.fillRect(p.pos.x, p.pos.y, p.size, p.size)
-  })
-}
-
 function draw() {
-  ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+  const image = new Image()
+  image.src = dataURL
+  image.onload = () => {
+    ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+    ctx.a.drawImage(image, 0, 0)
+  }
+  image.onerror = err => { throw err }
 
-  drawParticles()
-  drawBricks()
-  drawBalls()
-  drawPaddle()
-  drawBonuses()
-  drawScore()
-  drawLives()
-  drawLevel()
-  drawTimer()
+  scoreText.innerHTML= score
+  liveText.innerHTML= lives
+  levelText.innerHTML= level
+  timerText.innerHTML= Math.round(parseFloat(timer)).toString()
 
   socket.emit('collision detection', player)
 }

@@ -3,6 +3,9 @@ const { ZODIAC } = require('./constants.js')
 const { getRandom } = require('./utils.js')
 const { getRandomIntInclusive } = require('./utils')
 
+const Canvas = require("canvas");
+global.Image = Canvas.Image;
+
 class LevelMaker {
   constructor(
     level,
@@ -53,7 +56,10 @@ class LevelMaker {
 
         const pick = String(color).padStart(2, '0')
 
-        const src = './assets/' + pick + '.png'
+        const src = './public/assets/' + pick + '.png'
+        const image = new Image()
+        image.src = src
+
         const sprite = new Sprite({
           position: {
             x: brickX,
@@ -61,7 +67,7 @@ class LevelMaker {
           },
           width: this.brickWidth,
           height: this.brickHeight,
-          src: src,
+          image: image,
         })
 
         let status = 0

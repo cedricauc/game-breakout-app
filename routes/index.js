@@ -22,14 +22,18 @@ router.get('/game', passport.authenticate('session'), async function(req, res) {
 });
 
 router.post('/shop', passport.authenticate('session'), async function(req, res) {
+
   let points = req.user.points -5
   let games = req.user.gamesNbr +1
   const filter = { email: req.user.username };
   const update = { credit: points, gamesNbr: games };
   await User.findOneAndUpdate(filter, update)
   const currentUser = await User.findOne(filter)
-  req.user.points = currentUser.credit
+
   req.user.gamesNbr = currentUser.gamesNbr
+  req.user.points = currentUser.credit
+  req.user.level = currentUser.level
+  req.user.lives = currentUser.lives
 
   const freeGameNotification = hasFreeGame(req.user.date)
 
@@ -48,8 +52,12 @@ router.get('/shop', passport.authenticate('session'), async function(req, res) {
   const freeGameNotification = hasFreeGame(req.user.date)
   
   const filter = { email: req.user.username };
-  const user = await User.findOne(filter)
-  req.user.gamesNbr = user.gamesNbr
+
+  const currentUser = await User.findOne(filter)
+  req.user.gamesNbr = currentUser.gamesNbr
+  req.user.points = currentUser.credit
+  req.user.level = currentUser.level
+  req.user.lives = currentUser.lives
 
   res.render('shop', {
     user: req.user.pseudo,
@@ -64,6 +72,13 @@ router.get('/shop', passport.authenticate('session'), async function(req, res) {
 
 router.get('/trophy', passport.authenticate('session'), async function(req, res) {
   const allUsers = await User.find({}, { username: 1, bestScore: 1, timePlay: 1 }).sort( { bestScore: -1 });
+
+  const filter = { email: req.user.username };
+  const currentUser = await User.findOne(filter)
+  req.user.gamesNbr = currentUser.gamesNbr
+  req.user.points = currentUser.credit
+  req.user.level = currentUser.level
+  req.user.lives = currentUser.lives
 
   const freeGameNotification = hasFreeGame(req.user.date)
 

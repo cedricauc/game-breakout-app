@@ -13,10 +13,13 @@ body {
     box-sizing: inherit;
 }
 
-#root {
+.wrapper {
     min-height: 100%;
+}
+
+#root {
     display: grid;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: auto 1fr;
 }
 
 .cover {

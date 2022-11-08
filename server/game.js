@@ -4,6 +4,9 @@ const Particle = require('./particle.js')
 const {getRandomIntFromArray, getRandomInt, getRandom, animateSprite} = require('./utils.js')
 const Vector = require("./vector");
 
+const Canvas = require("canvas");
+global.Image = Canvas.Image;
+
 class Game {
     constructor(
         level,
@@ -22,7 +25,7 @@ class Game {
         this.particles = []
         this.paddleWidth = 75
         this.paddleHeight = 20
-        this.speed = 1
+        this.speed = 1.5
         this.timer = 0
         this.hue = 0
         this.win = false
@@ -82,7 +85,23 @@ class Game {
 
                             // update sprite
                             const pick = String(brick.color).padStart(2, '0')
-                            brick.sprite.src = './assets/' + pick + '.png'
+                            const src = './public/assets/' + pick + '.png'
+
+                            const image = new Image()
+                            image.src = src
+
+                            const sprite = new Sprite({
+                                position: {
+                                    x: brick.x,
+                                    y: brick.y,
+                                },
+                                width: this.brickWidth,
+                                height: this.brickHeight,
+                                image: image,
+                            })
+
+
+                            brick.sprite = sprite
 
                             break
                         }
@@ -173,6 +192,10 @@ class Game {
     }
 
     spawnPaddle() {
+        const src = './public/assets/35.png'
+        const image = new Image()
+        image.src = src
+
         const sprite = new Sprite({
             position: {
                 x: this.player.paddleX,
@@ -180,7 +203,7 @@ class Game {
             },
             width: 75,
             height: 20,
-            src: './assets/35.png',
+            image: image,
             animate: true,
             frames: {
                 max: 3,
@@ -208,6 +231,10 @@ class Game {
     }
 
     spawnBall(x, y) {
+        const src = './public/assets/ball.png'
+        const image = new Image()
+        image.src = src
+
         const sprite = new Sprite({
             position: {
                 x: x + (this.paddleWidth / 2),
@@ -215,7 +242,7 @@ class Game {
             },
             width: this.ballRadius,
             height: this.ballRadius,
-            src: './assets/ball.png'
+            image: image,
         })
 
         this.balls.push({
@@ -232,7 +259,10 @@ class Game {
         const status = getRandomIntFromArray([40, 41, 42, 43, 44, 45, 50, 100, 250, 500])
 
         const pick = String(status).padStart(2, '0')
-        const src = './assets/' + pick + '.png'
+        const src = './public/assets/' + pick + '.png'
+        const image = new Image()
+        image.src = src
+
         const sprite = new Sprite({
             position: {
                 x: x,
@@ -240,7 +270,7 @@ class Game {
             },
             width: this.brickWidth,
             height: this.brickHeight,
-            src: src,
+            image: image,
             animate: true,
             frames: {
                 max: 3,
