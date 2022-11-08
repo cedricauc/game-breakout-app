@@ -16,6 +16,7 @@ const routes = require('./routes/index')
 const users = require('./routes/users')
 
 const Game = require('./server/game.js')
+const Canva = require('./server/canva.js')
 
 //Init app
 const app = express()
@@ -124,6 +125,8 @@ io.use((socket, next) => {
 //Socket.io rooms
 let rooms = []
 
+let canva
+
 /**
  * @type {Socket}
  */
@@ -138,19 +141,17 @@ io.on('connection', (socket) => {
 
   const date = new Date().toDateString()
 
-  socket.on('playerData', (player) => {
+  socket.on('playerData', async (player) => {
 
     const filter = { email: socket.request.user.username };
     const update = { freeGameDate: date, gamesNbr: socket.request.user.gamesNbr};
     // update user freeGameDate to db
-    User.findOneAndUpdate(filter, update).then((data) => {
-      const currentUser =
-          User.findOne(filter).then((data) => {
-            //console.log(data)
-            socket.request.flag = false
-            socket.request.user.gamesNbr = data.gamesNbr
-          });
-    });
+    const currentUser = await User.findOneAndUpdate(filter, update, { new: true });
+
+    socket.request.flag = false
+    socket.request.user.gamesNbr = currentUser.gamesNbr
+    socket.request.user.freeGameDate = currentUser.freeGameDate
+    socket.request.user.freeGameDateUsed = currentUser.freeGameDateUsed
 
     let room = null
 
@@ -185,7 +186,26 @@ io.on('connection', (socket) => {
     // init ball
     room.game.spawnBall(player.paddleX, player.paddleY)
 
-    io.to(room.id).emit('play', player, room.game)
+    canva = new Canva()
+
+    canva.draw(
+            room.game.particles,
+            room.game.balls,
+            room.game.paddles,
+            room.game.bricks,
+            room.game.bonuses,
+            room.game.hue)
+
+    const dataURL = canva.canvas.toDataURL('image/png', 1)
+
+    io.to(room.id).emit('play',
+        room.game.score,
+        room.game.lives,
+        room.game.level,
+        room.game.timer,
+        room.game.win,
+        dataURL
+    )
   })
 
   socket.on('collision detection', (player) => {
@@ -215,70 +235,73 @@ io.on('connection', (socket) => {
     // check for bonus lifespan
     room.game.checkConsumable()
 
-    io.to(player.roomId).emit('play', player, room.game)
+    canva.draw(
+        room.game.particles,
+        room.game.balls,
+        room.game.paddles,
+        room.game.bricks,
+        room.game.bonuses,
+        room.game.hue)
+
+    const dataURL = canva.canvas.toDataURL('image/png', 1)
+
+    io.to(player.roomId).emit('play',
+        room.game.score,
+        room.game.lives,
+        room.game.level,
+        room.game.timer,
+        room.game.win,
+        dataURL
+    )
   })
 
-  socket.on('play again waiting area', (player) => {
+  socket.on('play again waiting area', async (player) => {
     //console.log(`[play again waiting area] - ${player.username}`)
+    const filter = {email: socket.request.user.username};
+
     const room = rooms.find((r) => r.id === player.roomId)
 
-    const filter = { email: socket.request.user.username };
-
     const bestScore = room.game.score > socket.request.user.bestScore ? room.game.score : socket.request.user.bestScore;
+    const gamesNbr = socket.request.user.gamesNbr - 1
 
-    // if free game is not used
-    if (socket.request.user.freeGameDateUsed !== socket.request.user.freeGameDate) {
+    // if free game is used
+    if (socket.request.user.freeGameDateUsed === socket.request.user.freeGameDate) {
+      //console.log('free game is used')
+
       const update = {
         lastScore: room.game.score,
         bestScore: bestScore,
-        timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString(),
-        freeGameDateUsed: date
-      }
+        timePlay: parseInt(socket.request.user.timePlay) + Math.ceil(room.game.timer),
+        gamesNbr: gamesNbr
+      };
 
       // update db
-      User.findOneAndUpdate(filter, update).then((data) => {
-        //console.log('cb', data.gamesNbr)
-      });
+      const currentUser = await User.findOneAndUpdate(filter, update, { new: true });
+      socket.request.user.gamesNbr = currentUser.gamesNbr
 
-      io.to(room.id).emit('play again waiting area', room.players)
-    }
-    else
-    {
       // if player has purchase game
-      if (socket.request.user.gamesNbr > 1) {
-
-        // get user available purchase game
-        const gamesNbr = socket.request.user.gamesNbr - 1
-        socket.request.user.gamesNbr = gamesNbr
-        const update = {
-          lastScore: room.game.score,
-          bestScore: bestScore,
-          timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString(),
-          gamesNbr: gamesNbr
-        };
-        // update db
-        User.findOneAndUpdate(filter, update).then((data) => {
-          //console.log('cb', data.gamesNbr)
-        });
-
+      if (currentUser.gamesNbr > 0) {
         io.to(room.id).emit('play again waiting area', room.players)
       }
       // if user has no more purchase game
       else {
-        const gamesNbr = socket.request.user.gamesNbr - 1
-        socket.request.user.gamesNbr = gamesNbr
-        const update = {
-          lastScore: room.game.score,
-          bestScore: bestScore,
-          timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString(),
-          gamesNbr: gamesNbr
-        };
-        // update to db
-        User.findOneAndUpdate(filter, update).then((data) => {
-        });
-
         io.to(room.id).emit('waiting area', room.players)
       }
+    } else {
+      //console.log('free game is not used')
+
+      const update = {
+        lastScore: room.game.score,
+        bestScore: bestScore,
+        freeGameDateUsed: date,
+        timePlay: parseInt(socket.request.user.timePlay) + Math.ceil(room.game.timer)
+      }
+
+      // update db
+      const currentUser = await User.findOneAndUpdate(filter, update, { new: true });
+      socket.request.user.freeGameDateUsed = currentUser.freeGameDateUsed
+
+      io.to(room.id).emit('play again waiting area', room.players)
     }
   })
 
@@ -308,7 +331,7 @@ io.on('connection', (socket) => {
     io.to(room.id).emit('play', player, room.game)
   })
 
-  socket.on('next level', (player) => {
+  socket.on('next level', async (player) => {
     // console.log(`[next level] - ${player.id} - ${player.username}`)
     const room = rooms.find((r) => r.id === player.roomId)
     if (room === undefined) {
@@ -324,10 +347,10 @@ io.on('connection', (socket) => {
       level: level,
       lastScore: room.game.score,
       bestScore: bestScore,
-      timePlay: (socket.request.user.timePlay + Math.round(parseFloat(room.game.timer))).toString()
+      timePlay: parseInt(socket.request.user.timePlay) + Math.ceil(room.game.timer)
     };
     // update user bestScore to db
-    User.findOneAndUpdate(filter, update).then((data) => {});
+    await User.findOneAndUpdate(filter, update, { new: true });
 
     //Init Game
     room.game = new Game(
