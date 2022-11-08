@@ -85,7 +85,7 @@ class Game {
 
                             // update sprite
                             const pick = String(brick.color).padStart(2, '0')
-                            const src = './public/assets/' + pick + '.png'
+                            const src = './public/assets/' + pick + '.jpg'
 
                             const image = new Image()
                             image.src = src
@@ -312,10 +312,14 @@ class Game {
                 this.lives++
                 break
             case 42:
-                this.speed = this.speed > 1 ? this.speed - 0.4 : 1
+                this.speed = this.speed > 1 ? this.speed - 0.5 : 1
+                bonus.consumable = true
+                bonus.lifespan = this.timer + 5
                 break
             case 43:
-                this.speed = this.speed < 2.2 ? this.speed + 0.4 : 2.2
+                this.speed = this.speed < 2.5 ? this.speed + 0.5 : 2.5
+                bonus.consumable = true
+                bonus.lifespan = this.timer + 5
                 break
             case 44:
                 this.paddleWidth = this.paddleWidth > 45 ? this.paddleWidth - 30 : 45
@@ -401,9 +405,15 @@ class Game {
             let consumable = this.consumable[v]
             if(this.timer > consumable.lifespan) {
                 switch(consumable.status) {
+                    case 42:
+                    case 43:
+                        this.speed = 1.5
+                        break
                     case 44:
                     case 45:
                         this.paddleWidth = 75
+                        break
+                    default :
                         break
                 }
                 this.consumable.splice(v, 1)

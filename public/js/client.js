@@ -54,6 +54,8 @@ container.appendChild(canvas.a)
 let ctx = {
   a: canvas.a.getContext('2d'),
 }
+ctx.a.patternQuality = 'fast'
+ctx.a.quality = 'fast'
 
 let paddleX = (canvas.a.width - paddleWidth) / 2
 let paddleY = canvas.a.height - paddleHeight
@@ -193,7 +195,9 @@ function draw() {
   image.src = dataURL
   image.onload = () => {
     ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+    ctx.a.save()
     ctx.a.drawImage(image, 0, 0)
+    ctx.a.restore()
   }
   image.onerror = err => { throw err }
 

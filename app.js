@@ -102,8 +102,20 @@ app.use('/users', users)
 //Init socket.io
 const server = app.listen(PORT)
 
-const io = require('socket.io')(server)
-const { Socket } = require('socket.io')
+const { instrument } = require("@socket.io/admin-ui");
+
+const { Socket } = require("socket.io")
+const io = require("socket.io")(server, {
+  cors: {
+    origin: ["https://admin.socket.io"],
+    credentials: true
+  }
+})
+
+instrument(io, {
+  auth: false
+});
+
 const User = require("./models/User");
 
 // convert a connect middleware to a Socket.IO middleware
@@ -196,7 +208,7 @@ io.on('connection', (socket) => {
             room.game.bonuses,
             room.game.hue)
 
-    const dataURL = canva.canvas.toDataURL('image/png', 1)
+    const dataURL = canva.canvas.toDataURL('image/jpeg', { quality: 0.5 })
 
     io.to(room.id).emit('play',
         room.game.score,
@@ -208,7 +220,7 @@ io.on('connection', (socket) => {
     )
   })
 
-  socket.on('collision detection', (player) => {
+  socket.on('collision detection', async (player) => {
     const room = rooms.find((r) => r.id === player.roomId)
     //console.log(`[collision detection] - ${player.id} - ${player.username}`)
     if (room === undefined) {
@@ -243,7 +255,7 @@ io.on('connection', (socket) => {
         room.game.bonuses,
         room.game.hue)
 
-    const dataURL = canva.canvas.toDataURL('image/png', 1)
+    const dataURL = canva.canvas.toDataURL('image/jpeg', { quality: 0.5 })
 
     io.to(player.roomId).emit('play',
         room.game.score,
@@ -266,8 +278,6 @@ io.on('connection', (socket) => {
 
     // if free game is used
     if (socket.request.user.freeGameDateUsed === socket.request.user.freeGameDate) {
-      //console.log('free game is used')
-
       const update = {
         lastScore: room.game.score,
         bestScore: bestScore,
@@ -288,8 +298,6 @@ io.on('connection', (socket) => {
         io.to(room.id).emit('waiting area', room.players)
       }
     } else {
-      //console.log('free game is not used')
-
       const update = {
         lastScore: room.game.score,
         bestScore: bestScore,
@@ -400,7 +408,7 @@ function createRoom(player, level, lives) {
         paddleX: player.paddleX,
         paddleY: player.paddleY,
       },
-      2,
+      0,
       lives,
     ),
   }

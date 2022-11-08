@@ -56,7 +56,7 @@ class LevelMaker {
 
         const pick = String(color).padStart(2, '0')
 
-        const src = './public/assets/' + pick + '.png'
+        const src = './public/assets/' + pick + '.jpg'
         const image = new Image()
         image.src = src
 

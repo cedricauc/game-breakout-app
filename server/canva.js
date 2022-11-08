@@ -8,6 +8,8 @@ class Canva {
 
         this.canvas = createCanvas(720, 480)
         this.ctx = this.canvas.getContext('2d')
+        this.ctx.patternQuality = 'fast'
+        this.ctx.quality = 'fast'
     }
 
     drawSprite(sprite) {
@@ -76,7 +78,6 @@ class Canva {
 
     draw(particles, balls, paddles, bricks, bonuses, hue) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
         this.drawParticles(particles, hue)
         this.drawBricks(bricks)
         this.drawBalls(balls)
