@@ -21,7 +21,7 @@ let score
 let lives
 let level
 let timer
-let dataURL
+let buffer
 
 const usernameSpan = document.querySelector('#username')
 const gameCard = document.querySelector('#game-card')
@@ -112,12 +112,12 @@ socket.on('join room', (roomId) => {
   player.paddleY = paddleY
 })
 
-socket.on('play', (_score, _lives, _level, _timer, _win, _dataURL) => {
+socket.on('play', (_score, _lives, _level, _timer, _win, _buffer) => {
   score = _score
   lives = _lives
   level = _level
   timer = _timer
-  dataURL = _dataURL
+  buffer = _buffer
 
   if (_win) {
     showWaitingArea()
@@ -191,8 +191,15 @@ function setNotificationMessage(classToRemove, classToAdd, html) {
 }
 
 function draw() {
+  // const clampedArray = new Uint8ClampedArray(buffer);
+  // const imageData = new ImageData(clampedArray, canvas.a.width, canvas.a.height);
+  // ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+  // ctx.a.save()
+  // ctx.a.putImageData(imageData, 0, 0);
+  // ctx.a.restore()
+
   const image = new Image()
-  image.src = dataURL
+  image.src = buffer
   image.onload = () => {
     ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
     ctx.a.save()

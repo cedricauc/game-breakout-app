@@ -208,7 +208,9 @@ io.on('connection', (socket) => {
             room.game.bonuses,
             room.game.hue)
 
-    const dataURL = canva.canvas.toDataURL('image/jpeg', { quality: 0.5 })
+    const buffer = canva.canvas.toDataURL('image/jpeg', { quality: 0.4 })
+    //const imageData = canva.ctx.getImageData(0, 0, canva.canvas.width, canva.canvas.height)
+    //const buffer = imageData.data.buffer;
 
     io.to(room.id).emit('play',
         room.game.score,
@@ -216,7 +218,7 @@ io.on('connection', (socket) => {
         room.game.level,
         room.game.timer,
         room.game.win,
-        dataURL
+        buffer
     )
   })
 
@@ -255,7 +257,9 @@ io.on('connection', (socket) => {
         room.game.bonuses,
         room.game.hue)
 
-    const dataURL = canva.canvas.toDataURL('image/jpeg', { quality: 0.5 })
+    const buffer = canva.canvas.toDataURL('image/jpeg', { quality: 0.4 })
+    //const imageData = canva.ctx.getImageData(0, 0, canva.canvas.width, canva.canvas.height)
+    //const buffer = imageData.data.buffer;
 
     io.to(player.roomId).emit('play',
         room.game.score,
@@ -263,7 +267,7 @@ io.on('connection', (socket) => {
         room.game.level,
         room.game.timer,
         room.game.win,
-        dataURL
+        buffer
     )
   })
 
@@ -336,7 +340,28 @@ io.on('connection', (socket) => {
     // init ball
     room.game.spawnBall(player.paddleX, player.paddleY)
 
-    io.to(room.id).emit('play', player, room.game)
+    canva = new Canva()
+
+    canva.draw(
+        room.game.particles,
+        room.game.balls,
+        room.game.paddles,
+        room.game.bricks,
+        room.game.bonuses,
+        room.game.hue)
+
+    const buffer = canva.canvas.toDataURL('image/jpeg', { quality: 0.4 })
+    //const imageData = canva.ctx.getImageData(0, 0, canva.canvas.width, canva.canvas.height)
+    //const buffer = imageData.data.buffer;
+
+    io.to(player.roomId).emit('play',
+        room.game.score,
+        room.game.lives,
+        room.game.level,
+        room.game.timer,
+        room.game.win,
+        buffer
+    )
   })
 
   socket.on('next level', async (player) => {
@@ -380,7 +405,28 @@ io.on('connection', (socket) => {
     // init ball
     room.game.spawnBall(player.paddleX, player.paddleY)
 
-    io.to(room.id).emit('play', player, room.game)
+    canva = new Canva()
+
+    canva.draw(
+        room.game.particles,
+        room.game.balls,
+        room.game.paddles,
+        room.game.bricks,
+        room.game.bonuses,
+        room.game.hue)
+
+    const buffer = canva.canvas.toDataURL('image/jpeg', { quality: 0.4 })
+    //const imageData = canva.ctx.getImageData(0, 0, canva.canvas.width, canva.canvas.height)
+    //const buffer = imageData.data.buffer;
+
+    io.to(player.roomId).emit('play',
+        room.game.score,
+        room.game.lives,
+        room.game.level,
+        room.game.timer,
+        room.game.win,
+        buffer
+    )
   })
 
   socket.on('disconnect', () => {
@@ -423,3 +469,5 @@ function createRoom(player, level, lives) {
 function roomId() {
   return Math.random().toString(36).substr(2, 9)
 }
+
+
