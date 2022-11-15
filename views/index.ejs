@@ -1,21 +1,27 @@
-<div class="clearfix"></div>
-<div class="container mt-5">
-    <div class="row my-5">
-        <div class="col-md-4 m-auto">
-            <div class="card card-body text-center text-bg-dark mb-5">
-                <h1><i class="fa-solid fa-dragon"></i></h1>
-                <p>S'inscrire ou se connecter et jouer gratuitement</p>
-                <% if(success_msg != ''){ %>
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <%= success_msg %>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+<main class="position-static">
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 m-auto">
+                    <div class="card card-body text-center text-bg-dark p-4 my-5">
+                        <h1 class="text-center mb-3">
+                            <i class="fa-solid fa-dragon mb-3"></i> <br>
+                        S'inscrire ou se connecter et jouer gratuitement
+                        </h1>
+                        <% if(success_msg != ''){ %>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                <%= success_msg %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <% } %>
+                        <a href="/users/register" class="btn btn-primary btn-block my-3"
+                        >S'inscrire</a
+                        >
+                        <a href="/users/login" class="btn btn-secondary btn-block mb-3">Se connecter</a>
                     </div>
-                <% } %>
-                <a href="/users/register" class="btn btn-primary btn-block mb-3"
-                >S'inscrire</a
-                >
-                <a href="/users/login" class="btn btn-secondary btn-block">Se connecter</a>
+                </div>
             </div>
         </div>
-    </div>
-</div>
+
+</main>
+

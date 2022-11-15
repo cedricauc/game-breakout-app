@@ -9,11 +9,13 @@ global.Image = Canvas.Image;
 
 class Game {
     constructor(
+        orbit,
         level,
         player,
         score,
         lives,
     ) {
+        this.orbit = orbit
         this.level = level
         this.player = player
         this.score = score
@@ -217,6 +219,7 @@ class Game {
 
     spawnLevel() {
         const level = new LevelMaker(
+            this.orbit,
             this.level - 1,
             this.brickWidth,
             this.brickHeight,

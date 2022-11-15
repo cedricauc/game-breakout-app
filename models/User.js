@@ -1,6 +1,12 @@
 const { Schema, model } = require('mongoose')
 const crypto = require('crypto')
 
+const orbitSchema = new Schema({
+  planet: {type: String,  required: true},
+  userLevel: {type: Number, default: 1},
+  bestScore: {type: Number, default: 0},
+})
+
 const userSchema = new Schema({
   username: { type: String,  required: true },
   email: { type: String, unique: true, required: true },
@@ -9,13 +15,13 @@ const userSchema = new Schema({
   date: { type: Date, default: new Date().toString()},
   freeGameDate: { type: String, default: ""},  // user can play one free game per day
   freeGameDateUsed: { type: String, default: ""},  // whether user played free game
-  level: {type: Number, default: 1},
+  currentOrbit: {type: String, default: ""},
   lives: {type: Number, default: 3},
   lastScore: {type: Number, default: 0},
-  bestScore: {type: Number, default: 0},
   timePlay: {type: Number, default: 0},
   credit: {type: Number, default: 0},
-  gamesNbr: {type: Number, default: 0}
+  gamesNbr: {type: Number, default: 0},
+  orbits: [orbitSchema]
 })
 
 userSchema.methods.setPassword = function (password) {

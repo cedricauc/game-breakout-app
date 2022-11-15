@@ -1,15 +1,49 @@
-<div class="container">
-    <h2 class="mt-4 text-white">Dashboard</h2>
-    <% if(user) { %>
-        <h2 class="mt-4">Bonjour, <%= user %></h2>
-    <% } %>
-    <form action="/game" method="get">
-        <button class="btn btn-secondary btn-block">Jouer</button>
-    </form>
-    <form action="/shop" method="post">
-        <button class="btn btn-secondary btn-block mt-2 mb-2">Boutique</button>
-    </form>
-    <form action="/users/logout" method="post">
-        <button class="btn btn-secondary btn-block">Se déconnecter</button>
-    </form>
-</div>
+<main class="position-static view-3D set-speed">
+
+    <div id="navbar">
+        <%- include('./partials/nav', {flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
+    </div>
+
+    <div id="data">
+        <a class="mercury" title="mercury" href="#mercuryspeed">Mercury</a>
+        <a class="venus" title="venus" href="#venusspeed">Venus</a>
+        <a class="earth active" title="earth" href="#earthspeed">Earth</a>
+        <a class="mars" title="mars" href="#marsspeed">Mars</a>
+        <a class="jupiter" title="jupiter" href="#jupiterspeed">Jupiter</a>
+        <a class="saturn" title="saturn" href="#saturnspeed">Saturn</a>
+        <a class="uranus" title="uranus" href="#uranusspeed">Uranus</a>
+        <a class="neptune" title="neptune" href="#neptunespeed">Neptune</a>
+    </div>
+
+    <div id="solar-system" class="earth">
+        <div id="sun">
+            <dl class="infos">
+                <dt>Sun</dt>
+                <dd><span></span></dd>
+            </dl>
+        </div>
+        <% orbitList.orbits.forEach((orbit) => { %>
+            <div id="<%= orbit.planet %>" class="orbit">
+                <div class="pos">
+                    <!--                                    <div class="orbit">-->
+                    <!--                                        <div class="pos">-->
+                    <!--                                            <div class="moon"></div>-->
+                    <!--                                        </div>-->
+                    <!--                                    </div>-->
+                    <div class="planet">
+                        <dl class="infos">
+                            <dt><%= orbit.planet %></dt>
+                            <dd>
+                                <form action="/game" method="post" id="orbitForm">
+                                    <input type="hidden" name="planet" value=<%= orbit.planet %>>
+                                    <button type="submit">Play</button>
+                                </form>
+                                <span><%= orbit.levelNbr %> level</span>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</main>

@@ -1,11 +1,9 @@
-const { createCanvas } = require('canvas')
+const {createCanvas} = require('canvas')
 
 class Canva {
-    constructor(
-    ) {
+    constructor() {
         this.brickRowCount = 8
         this.brickColumnCount = 8
-
         this.canvas = createCanvas(720, 480)
         this.ctx = this.canvas.getContext('2d')
         this.ctx.patternQuality = 'fast'

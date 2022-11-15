@@ -4,20 +4,24 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/User')
 
+
 // Store user session
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {
     cb(null, {
       id: user.id,
-      username: user.email,
       pseudo: user.username,
+      username: user.email,
       date: user.freeGameDate,
-      level: user.level,
       lives: user.lives,
-      bestScore: user.bestScore,
+      lastScore : user.lastScore,
       timePlay: user.timePlay,
       points: user.credit,
-      gamesNbr: user.gamesNbr
+      gamesNbr: user.gamesNbr,
+      bestScore: user.bestScore,
+      currentOrbit: user.currentOrbit,
+      orbits: user.orbits,
+      level: user.level,
     })
   })
 })
@@ -49,10 +53,17 @@ router.get('/login', function (req, res) {
 
 router.post('/login',
     passport.authenticate('local', {
-      successRedirect: '/game',
+      successRedirect: '/home',
       failureRedirect: '/users/login',
       failureFlash: true
-    }))
+    }),
+    function(req, res) {
+      let prevSession = req.session;
+      req.session.regenerate((err) => {  // Compliant
+        Object.assign(req.session, prevSession);
+        res.redirect('/');
+      });
+    });
 
 router.post('/logout', function (req, res, next) {
   req.logout(function (err) {
