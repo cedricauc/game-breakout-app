@@ -183,18 +183,27 @@ function setNotificationMessage(classToRemove, classToAdd, html) {
 }
 
 function draw() {
-    const arrayBufferView = new Uint8Array(buffer)
-    const blob = new Blob([arrayBufferView], {type: "image/png"})
-    const uri = urlCreator.createObjectURL(blob)
-    image.src = uri
+    // const arrayBufferView = new Uint8Array(buffer)
+    // const blob = new Blob([arrayBufferView], {type: "image/png"})
+    // const uri = urlCreator.createObjectURL(blob)
+    // image.src = uri
+    // image.onload = () => {
+    //     ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+    //     ctx.a.drawImage(image, 0, 0)
+    //     urlCreator.revokeObjectURL(uri);
+    // }
+    // image.onerror = err => {
+    //     throw err
+    // }
+    image.src = buffer
     image.onload = () => {
         ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+        ctx.a.save()
         ctx.a.drawImage(image, 0, 0)
-        urlCreator.revokeObjectURL(uri);
+        ctx.a.restore()
     }
-    image.onerror = err => {
-        throw err
-    }
+    image.onerror = err => { throw err }
+
     scoreText.innerHTML = score
     liveText.innerHTML = lives
     levelText.innerHTML = level

@@ -4,7 +4,6 @@ const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('../models/User')
 
-
 // Store user session
 passport.serializeUser(function (user, cb) {
   process.nextTick(function () {

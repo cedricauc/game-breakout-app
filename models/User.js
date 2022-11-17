@@ -5,6 +5,7 @@ const orbitSchema = new Schema({
   planet: {type: String,  required: true},
   userLevel: {type: Number, default: 1},
   bestScore: {type: Number, default: 0},
+  completeLevel: {type: Boolean, default: false}
 })
 
 const userSchema = new Schema({

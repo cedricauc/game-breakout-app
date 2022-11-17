@@ -16,11 +16,12 @@
     "bootstrap": "^5.0.0-beta2",
     "canvas": "^2.10.2",
     "connect-flash": "*",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",
     "ejs": "*",
-    "express": "*",
+    "express": "^4.18.2",
     "express-ejs-layouts": "^2.5.1",
-    "express-session": "*",
+    "express-session": "^1.17.3",
     "express-validator": "^6.14.2",
     "helmet": "^6.0.0",
     "jquery": "^3.6.0",
@@ -33,5 +34,5 @@
   "devDependencies": {
     "nodemon": "^2.0.6"
   },
-  "homepage": "https://github.com/ipogartsev/game-breakout-app"
+  "homepage": "https://github.com/cedricauc/game-breakout-app"
 }

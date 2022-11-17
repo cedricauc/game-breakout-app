@@ -7,12 +7,56 @@
     <!-- section -->
     <section class="position-static bg-transparent" id="section-game">
         <div class="container">
-            <div class="d-flex justify-content-center align-items-center flex-column h-100">
+            <div class="row">
+
+                <div id="progress-area">
+                    <div class="d-flex align-items-center flex-row m-5">
+                        <div class="progress__bar">
+                            <div class="bar">
+                                <div class="bar__fill" style="width: <%= barFillWidth %>%;"></div>
+                            </div>
+                            <div class="point point--complete">
+                                <div class="bullet"></div>
+                                <form action="/home" method="post">
+                                    <button class="bg-transparent text-info border-0 label d-flex flex-grow-1 align-items-center"
+                                            type="submit">
+                                        <i class="fa-solid fa-arrow-left"></i>
+                                        <span class="ms-2">Universe</span>
+                                    </button>
+                                </form>
+                            </div>
+
+                            <% for (let i = 1; i <= orbit.levelNbr; i++) { %>
+
+                                <% if (level === i) { %>
+                                    <div class="point point--active">
+                                        <div class="bullet"></div>
+                                        <label class="label"><%= i %></label>
+                                    </div>
+                                <% } else if (level > i || completeLevel) { %>
+                                    <div class="point point--complete">
+                                        <div class="bullet"></div>
+                                        <label class="label"><%= i %></label>
+                                    </div>
+                                <% } else { %>
+                                    <div class="point">
+                                        <div class="bullet"></div>
+                                        <label class="label"><%= i %></label>
+                                    </div>
+                                <% } %>
+
+                            <% } %>
+
+                        </div>
+                    </div>
+
+                </div>
+
                 <!-- start area-->
-                <div class="d-flex align-content-center flex-wrap mb-3" id="start-area">
+                <div class="d-flex justify-content-center align-content-center flex-wrap mb-3" id="start-area">
                     <% if (flag || gamesNbr > 0) { %>
 
-                        <button class="btn btn-dark btn-lg p-2 text-info" id="startGame">
+                        <button class="btn btn-dark btn-lg p-2 text-info btn-start " id="startGame">
                             START
                         </button>
 
@@ -21,7 +65,7 @@
                             <div class="d-flex flex-row">
                                 <form action="/shop" method="get" class="d-flex flex-column">
                                     <% if(msg != "") { %>
-                                        <p class="text-white mb-5"><%= msg %></p>
+                                        <p class="text-white mb-5 fs-6"><%= msg %></p>
                                     <% } %>
                                     <button class="btn btn-dark btn-lg p-2 text-info">Boutique</button>
                                 </form>
@@ -30,23 +74,26 @@
                     <% } %>
                 </div>
                 <!-- game area -->
-                <div class="d-none d-flex align-content-center flex-wrap mb-3 mt-5" id="game-card">
+                <div class="d-none d-flex justify-content-center align-content-center flex-wrap mb-3 mt-5"
+                     id="game-card">
                     <div class="content content--canvas"></div>
                 </div>
 
                 <!-- notification -->
-                <div class="d-none d-flex align-content-center flex-wrap mb-3" id="notification-card">
+                <div class="d-none d-flex justify-content-center align-content-center flex-wrap mb-3"
+                     id="notification-card">
                     <div class="alert text-center fs-5" role="alert" id="notification-message"></div>
                 </div>
 
                 <!-- boutique -->
-                <div class="d-none d-flex align-content-center flex-wrap mb-3" id="shop-card">
+                <div class="d-none d-flex justify-content-center align-content-center flex-wrap mb-3" id="shop-card">
                     <div class="d-flex flex-row">
                         <form action="/shop" method="get" class="d-flex flex-column">
                             <button class="btn btn-dark btn-lg p-2 text-info">Boutique</button>
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>

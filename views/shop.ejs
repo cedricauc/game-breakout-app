@@ -11,9 +11,9 @@
                 </div>
                 <div class="d-flex justify-content-center">
                     <div class="card bg-dark p-3" style="width: 18rem;">
-                        <p class="card-text text-light">Points disponibles : <%= points %></p>
-                        <p class="card-text text-light">Jeux disponibles : <%= gamesNbr %></p>
-                        <p class="card-text text-light">Jeu : 5 points</p>
+                        <p class="card-text text-light fs-6">Points disponibles : <%= points %></p>
+                        <p class="card-text text-light fs-6">Jeux disponibles : <%= gamesNbr %></p>
+                        <p class="card-text text-light fs-6">Jeu : 5 points</p>
                         <% if(points >= 5) {%>
                             <form action="/shop" method="post">
                                 <button class="btn btn-outline-info btn p-2 btn-block mt-2 mb-2">Utiliser les points</button>

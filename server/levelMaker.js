@@ -31,6 +31,7 @@ class LevelMaker {
         const datas = Object.entries(mapList[this.orbit])[this.level]
         this.map = datas[1].map
         this.colors = datas[1].colors
+        this.status = datas[1].status
     }
 
     createMap() {
@@ -76,9 +77,9 @@ class LevelMaker {
 
                 let status = 0
 
-                // place brick if 1 on map
+                // set brick if 1 on map
                 if (this.map[c][r] === 1) {
-                    status = Math.ceil(Math.sqrt(this.level + 1))
+                    status = this.status
                 }
 
                 // init brick

@@ -16,12 +16,12 @@
     </div>
 
     <div id="solar-system" class="earth">
-        <div id="sun">
-            <dl class="infos">
-                <dt>Sun</dt>
-                <dd><span></span></dd>
-            </dl>
-        </div>
+<!--        <div id="sun">-->
+<!--            <dl class="infos">-->
+<!--                <dt>Sun</dt>-->
+<!--                <dd><span></span></dd>-->
+<!--            </dl>-->
+<!--        </div>-->
         <% orbitList.orbits.forEach((orbit) => { %>
             <div id="<%= orbit.planet %>" class="orbit">
                 <div class="pos">
@@ -32,7 +32,7 @@
                     <!--                                    </div>-->
                     <div class="planet">
                         <dl class="infos">
-                            <dt><%= orbit.planet %></dt>
+                            <dt class="text-capitalize mb-3"><%= orbit.planet %></dt>
                             <dd>
                                 <form action="/game" method="post" id="orbitForm">
                                     <input type="hidden" name="planet" value=<%= orbit.planet %>>

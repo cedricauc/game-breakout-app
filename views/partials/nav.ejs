@@ -7,11 +7,11 @@
                 <form action="/users/logout" method="post" class="float-start ps-4 pt-1 me-1">
                     <button class="p-0 btn btn-outline-info btn-block"><i class="fa-solid fa-right-from-bracket"></i></button>
                 </form>
-                <h5 class="float-start ps-1 pt-1 mb-0 text-light">
+                <h5 class="float-start ps-1 pt-1 mb-0 text-light fs-6">
                     Bienvenue <span class="badge bg-dark p-1 px-2 pb-2 text-info" id="username"><%= user %></span>
-                    <% if (flag) { %>
-                        <span class="font-weight-light" id="free-game">| 1 jeu gratuit</span>
-                    <% }  %>
+
+                        <span class="font-weight-light" id="free-game"><% if (flag) { %>| 1 jeu gratuit <% }  %></span>
+
                     <span class="font-weight-light" id="game-number">| Jeux achetés : <%= gamesNbr  %></span>
                 </h5>
             </div>

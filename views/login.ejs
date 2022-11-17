@@ -8,14 +8,14 @@
                             <i class="fa-solid fa-right-to-bracket"></i> Se connecter
                         </h1>
                         <% if(error != ''){ %>
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <div class="alert alert-warning alert-dismissible fade show fs-6" role="alert">
                                 <%= error %>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                         <% } %>
                         <form action="/users/login" method="post">
                             <div class="form-group mb-3">
-                                <label for="email" class="form-label">Email</label>
+                                <label for="email" class="form-label fs-6">Email</label>
                                 <input class="form-control"
                                        id="email"
                                        name="email"
@@ -23,7 +23,7 @@
                                        required autofocus>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="password" class="form-label">Mot de passe</label>
+                                <label for="password" class="form-label fs-6">Mot de passe</label>
                                 <input class="form-control"
                                        id="password"
                                        name="password"
@@ -32,7 +32,7 @@
                             </div>
                             <button type="submit" class="btn btn-lg btn-primary form-control mt-3 ">S'identifier</button>
                         </form>
-                        <p class="mt-4">Vous n'avez pas de compte? <a class="link-light" href="/users/register"> S'inscrire</a>
+                        <p class="mt-4 fs-6">Vous n'avez pas de compte? <a class="link-light" href="/users/register"> S'inscrire</a>
                         </p>
                     </div>
                 </div>
