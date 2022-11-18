@@ -26,7 +26,7 @@ router.get('/game', passport.authenticate('session'), async function (req, res) 
     const freeGameNotification = hasFreeGame(currentUser.freeGameDate)
 
     res.render('game', {
-        user: currentUser.pseudo,
+        user: req.user.pseudo,
         points: currentUser.points,
         lives: currentUser.lives,
         gamesNbr: currentUser.gamesNbr,
@@ -66,7 +66,7 @@ router.post('/game', passport.authenticate('session'), async function (req, res)
     const barFillWidth = currentOrbit.completeLevel ? 100 : (userLevel - 1) / (orbit.levelNbr) * 100
 
     res.render('game', {
-        user: currentUser.pseudo,
+        user: req.user.pseudo,
         points: currentUser.points,
         lives: currentUser.lives,
         gamesNbr: currentUser.gamesNbr,
@@ -109,7 +109,7 @@ router.get('/shop', passport.authenticate('session'), async function (req, res) 
     const userLevel = req.user.currentOrbit ? req.user.orbits.find(v => v.planet == req.user.currentOrbit).userLevel : ''
 
     res.render('shop', {
-        user: currentUser.pseudo,
+        user: req.user.pseudo,
         points: currentUser.points,
         lives: currentUser.lives,
         gamesNbr: currentUser.gamesNbr,
@@ -120,7 +120,7 @@ router.get('/shop', passport.authenticate('session'), async function (req, res) 
 });
 
 router.get('/trophy', passport.authenticate('session'), async function (req, res) {
-    const allUsers = await User.find({}, {username: 1, bestScore: 1, timePlay: 1}).sort({bestScore: -1});
+    const allUsers = await User.find({}, {username: 1, lastScore: 1, timePlay: 1}).sort({lastScore: -1});
 
     const filter = {email: req.user.username}
     let currentUser = await User.findOne(filter)
@@ -128,7 +128,7 @@ router.get('/trophy', passport.authenticate('session'), async function (req, res
     const userLevel = req.user.currentOrbit ? req.user.orbits.find(v => v.planet == req.user.currentOrbit).userLevel : ''
 
     res.render('trophy', {
-        user: currentUser.pseudo,
+        user: req.user.pseudo,
         points: currentUser.points,
         lives: currentUser.lives,
         gamesNbr: currentUser.gamesNbr,

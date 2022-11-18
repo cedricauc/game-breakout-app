@@ -261,8 +261,6 @@ io.on('connection', (socket) => {
             room.game.bonuses,
             room.game.hue)
 
-        const buffer = canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
-
         io.to(player.roomId).emit('play',
             room.game.score,
             room.game.lives,
@@ -270,7 +268,7 @@ io.on('connection', (socket) => {
             room.game.timer,
             room.game.win,
             //canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
-            buffer
+            canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
         )
     })
 

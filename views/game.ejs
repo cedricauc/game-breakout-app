@@ -1,15 +1,14 @@
 <main class="position-static">
 
     <div id="navbar" class="position-static">
-        <%- include('./partials/nav', {flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
+        <%- include('./partials/nav', {user: user, flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
     </div>
 
     <!-- section -->
     <section class="position-static bg-transparent" id="section-game">
         <div class="container">
             <div class="row">
-
-                <div id="progress-area">
+                <div id="progress-area" class="mb-xl-5">
                     <div class="d-flex align-items-center flex-row m-5">
                         <div class="progress__bar">
                             <div class="bar">
@@ -53,10 +52,10 @@
                 </div>
 
                 <!-- start area-->
-                <div class="d-flex justify-content-center align-content-center flex-wrap mb-3" id="start-area">
+                <div class="d-flex justify-content-center align-content-center flex-wrap mb-3 mt-lg-5" id="start-area">
                     <% if (flag || gamesNbr > 0) { %>
 
-                        <button class="btn btn-dark btn-lg p-2 text-info btn-start " id="startGame">
+                        <button class="btn btn-lg btn-info text-light p-2 " id="startGame">
                             START
                         </button>
 
@@ -67,14 +66,15 @@
                                     <% if(msg != "") { %>
                                         <p class="text-white mb-5 fs-6"><%= msg %></p>
                                     <% } %>
-                                    <button class="btn btn-dark btn-lg p-2 text-info">Boutique</button>
+                                    <button class="btn btn-lg btn-info text-light p-2 text-info">Boutique</button>
                                 </form>
                             </div>
                         </div>
                     <% } %>
                 </div>
+
                 <!-- game area -->
-                <div class="d-none d-flex justify-content-center align-content-center flex-wrap mb-3 mt-5"
+                <div class="d-none d-flex justify-content-center align-content-center flex-wrap mb-3 mt-lg-5"
                      id="game-card">
                     <div class="content content--canvas"></div>
                 </div>
@@ -89,7 +89,7 @@
                 <div class="d-none d-flex justify-content-center align-content-center flex-wrap mb-3" id="shop-card">
                     <div class="d-flex flex-row">
                         <form action="/shop" method="get" class="d-flex flex-column">
-                            <button class="btn btn-dark btn-lg p-2 text-info">Boutique</button>
+                            <button class="btn btn-lg btn-info text-light p-2 text-info">Boutique</button>
                         </form>
                     </div>
                 </div>

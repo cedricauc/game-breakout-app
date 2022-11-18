@@ -1,7 +1,82 @@
-<main class="position-static view-3D set-speed">
+<main class="position-static view-3D set-speed" id="root">
 
     <div id="navbar">
-        <%- include('./partials/nav', {flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
+        <%- include('./partials/nav', {user: user, flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
+    </div>
+
+    <div id="mini-menu" class="container">
+        <nav id="sidebar">
+            <div class="p-4 pt-5">
+                <ul class="list-group list-unstyled components mb-5 ">
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="mercury">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Mercury
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="venus">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Venus
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="earth">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Earth
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="mars">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Mars
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="jupiter">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Jupiter
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="saturn">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Saturn
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="uranus">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Uranus
+                            </button>
+                        </form>
+                    </li>
+                    <li class="list-item border-info border-1 border-bottom bg-dark p-2 mb-3 text-center">
+                        <form action="/game" method="post">
+                            <input type="hidden" name="planet" value="neptune">
+                            <button class="btn btn-link btn-orbit text-light text-decoration-none fs-4" type="submit">
+                                Neptune
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+
+            </div>
+        </nav>
+
     </div>
 
     <div id="data">
@@ -16,12 +91,12 @@
     </div>
 
     <div id="solar-system" class="earth">
-<!--        <div id="sun">-->
-<!--            <dl class="infos">-->
-<!--                <dt>Sun</dt>-->
-<!--                <dd><span></span></dd>-->
-<!--            </dl>-->
-<!--        </div>-->
+        <!--        <div id="sun">-->
+        <!--            <dl class="infos">-->
+        <!--                <dt>Sun</dt>-->
+        <!--                <dd><span></span></dd>-->
+        <!--            </dl>-->
+        <!--        </div>-->
         <% orbitList.orbits.forEach((orbit) => { %>
             <div id="<%= orbit.planet %>" class="orbit">
                 <div class="pos">
@@ -36,7 +111,7 @@
                             <dd>
                                 <form action="/game" method="post" id="orbitForm">
                                     <input type="hidden" name="planet" value=<%= orbit.planet %>>
-                                    <button type="submit">Play</button>
+                                    <button class="btn btn-lg btn-outline-info btn-block" type="submit">PLAY</button>
                                 </form>
                                 <span><%= orbit.levelNbr %> level</span>
                             </dd>
