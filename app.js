@@ -10,7 +10,28 @@ const db = require('./config/data').mongoURI
 const secret = require('./config/data').secret
 const helmet = require('helmet')
 const bodyParser = require("body-parser");
-const PORT = process.env.PORT || 5000
+
+// Utils
+const { getBotResponse, parseResponseDataset } = require('./utils');
+
+// Constants
+const {
+    PORT,
+    ONE_DAY,
+    RESPONSES_FILE_PATH,
+    PLAYER_DATA_EVENT,
+    COLLISION_DETECTION_EVENT,
+    GAME_WIN_EVENT,
+    GAME_OVER_EVENT,
+    PLAY_AGAIN_EVENT,
+    DISCONNECT_EVENT,
+    USER_MESSAGE_EVENT,
+    BOT_MESSAGE_EVENT,
+    JOIN_ROOM_EVENT, PLAY_EVENT, PLAY_AGAIN_WAITING_AREA_EVENT
+} = require('./datas/constants');
+
+
+//const PORT = process.env.PORT || 5000
 
 const routes = require('./routes/index')
 const users = require('./routes/users')
@@ -68,13 +89,11 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(express.static('public'))
 
-const oneDay = 1000 * 60 * 60 * 24;
-
 const sessionMiddleware = session({
     secret: secret,
     resave: true,
     saveUninitialized: true,
-    cookie: { maxAge: oneDay },
+    cookie: { maxAge: ONE_DAY },
 });
 
 // Express session
@@ -95,6 +114,7 @@ app.use(function (req, res, next) {
     res.locals.success_msg = req.flash('success_msg')
     res.locals.error_msg = req.flash('error_msg')
     res.locals.error = req.flash('error')
+    res.locals.user = req.user || null;
     next()
 })
 
@@ -142,6 +162,8 @@ io.use((socket, next) => {
 //Socket.io rooms
 let rooms = []
 
+let botResponses = null;
+
 //Node.js canvas
 let canva
 
@@ -159,7 +181,19 @@ io.on('connection', (socket) => {
 
     const date = new Date().toDateString()
 
-    socket.on('playerData', async (player) => {
+    socket.on(USER_MESSAGE_EVENT, (message) => {
+
+        const res = getBotResponse(message, botResponses)
+
+            setTimeout(() => {
+                socket.emit(
+                    BOT_MESSAGE_EVENT,
+                    res.outputs, res.orbits
+                );
+            }, 1000);
+    });
+
+    socket.on(PLAYER_DATA_EVENT, async (player) => {
         const filter = {email: socket.request.user.username};
         const update = {freeGameDate: date, gamesNbr: socket.request.user.gamesNbr};
         // update user freeGameDate to db
@@ -194,7 +228,7 @@ io.on('connection', (socket) => {
 
         socket.join(room.id)
 
-        io.to(socket.id).emit('join room', room.id)
+        io.to(socket.id).emit(JOIN_ROOM_EVENT, room.id)
 
         // init paddle
         room.game.spawnPaddle()
@@ -215,18 +249,18 @@ io.on('connection', (socket) => {
             room.game.bonuses,
             room.game.hue)
 
-        io.to(room.id).emit('play',
+        io.to(room.id).emit(PLAY_EVENT,
             room.game.score,
             room.game.lives,
             room.game.level,
             room.game.timer,
             room.game.win,
-            //canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
-            canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
+            canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
+            //canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
         )
     })
 
-    socket.on('collision detection', async (player) => {
+    socket.on(COLLISION_DETECTION_EVENT, async (player) => {
         const room = rooms.find((r) => r.id === player.roomId)
         //console.log(`[collision detection] - ${player.id} - ${player.username}`)
         if (room === undefined) {
@@ -261,18 +295,18 @@ io.on('connection', (socket) => {
             room.game.bonuses,
             room.game.hue)
 
-        io.to(player.roomId).emit('play',
+        io.to(player.roomId).emit(PLAY_EVENT,
             room.game.score,
             room.game.lives,
             room.game.level,
             room.game.timer,
             room.game.win,
-            //canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
-            canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
+            canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
+            //canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
         )
     })
 
-    socket.on('game win', async (player) => {
+    socket.on(GAME_WIN_EVENT, async (player) => {
         // console.log(`[game win] - ${player.id} - ${player.username}`)
         const room = rooms.find((r) => r.id === player.roomId)
         if (room === undefined) {
@@ -310,10 +344,10 @@ io.on('connection', (socket) => {
         socket.request.user.bestScore = bestScore
         socket.request.user.orbits = currentUser.orbits
 
-        io.to(room.id).emit('play again waiting area', socket.request.user.gamesNbr)
+        io.to(room.id).emit(PLAY_AGAIN_WAITING_AREA_EVENT, socket.request.user.gamesNbr)
     })
 
-    socket.on('game over', async (player) => {
+    socket.on(GAME_OVER_EVENT, async (player) => {
         //console.log(`[game over] - ${player.username}`)
         const room = rooms.find((r) => r.id === player.roomId)
         if (room === undefined) {
@@ -353,20 +387,20 @@ io.on('connection', (socket) => {
             socket.request.user.orbits = currentUser.orbits
         }
 
-        io.to(room.id).emit('play again waiting area', socket.request.user.gamesNbr)
+        io.to(room.id).emit(PLAY_AGAIN_WAITING_AREA_EVENT, socket.request.user.gamesNbr)
     })
 
-    socket.on('play again', async (player) => {
+    socket.on(PLAY_AGAIN_EVENT, async (player) => {
         const room = rooms.find((r) => r.id === player.roomId)
         if (room === undefined) {
             return
         }
 
         if (socket.request.user.gamesNbr < 1) {
-            io.to(room.id).emit('play again waiting area', socket.request.user.gamesNbr)
+            io.to(room.id).emit(PLAY_AGAIN_WAITING_AREA_EVENT, socket.request.user.gamesNbr)
         }
 
-        const userLevel = socket.request.user.orbits.find(v => v.planet == socket.request.user.currentOrbit).userLevel
+        const userLevel = socket.request.user.orbits.find(v => v.planet === socket.request.user.currentOrbit).userLevel
         const lives = room.game.lives > 0 ? room.game.lives : 2
 
         // init Game
@@ -400,18 +434,18 @@ io.on('connection', (socket) => {
             room.game.bonuses,
             room.game.hue)
 
-        io.to(player.roomId).emit('play',
+        io.to(player.roomId).emit(PLAY_EVENT,
             room.game.score,
             room.game.lives,
             room.game.level,
             room.game.timer,
             room.game.win,
-            //canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
-            canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
+            canva.canvas.toBuffer('image/png', {compressionLevel: 0, filters: canva.canvas.PNG_FILTER_NONE})
+            //canva.canvas.toDataURL('image/jpeg', {quality: 0.3})
         )
     })
 
-    socket.on('disconnect', () => {
+    socket.on(DISCONNECT_EVENT, () => {
         //console.log(`[disconnect] ${socket.id}`)
         let room = null
 
@@ -425,6 +459,10 @@ io.on('connection', (socket) => {
         })
     })
 })
+
+parseResponseDataset(RESPONSES_FILE_PATH).then(parsedResponses => {
+    botResponses = parsedResponses;
+});
 
 function createRoom(player, orbit, level, lives) {
     const room = {

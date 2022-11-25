@@ -1,8 +1,6 @@
 const Sprite = require('./sprite.js')
-const {getRandom} = require('./utils.js')
-const {getRandomIntInclusive} = require('./utils')
+const {getRandom, getRandomIntInclusive} = require('../utils')
 const {mapList} = require('../datas/mapList')
-
 const Canvas = require('canvas');
 global.Image = Canvas.Image;
 

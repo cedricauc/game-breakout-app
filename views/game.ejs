@@ -1,8 +1,6 @@
-<main class="position-static">
+<%- include('./partials/nav', {user: user, flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
 
-    <div id="navbar" class="position-static">
-        <%- include('./partials/nav', {user: user, flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'game'}) %>
-    </div>
+<main class="position-static">
 
     <!-- section -->
     <section class="position-static bg-transparent" id="section-game">
@@ -63,8 +61,8 @@
                         <div class="d-flex align-content-center flex-wrap mb-3" id="shop-card">
                             <div class="d-flex flex-row">
                                 <form action="/shop" method="get" class="d-flex flex-column">
-                                    <% if(msg != "") { %>
-                                        <p class="text-white mb-5 fs-6"><%= msg %></p>
+                                    <% if(locals.error_msg != "") { %>
+                                        <p class="text-white mb-5 fs-6"><%= locals.error_msg %></p>
                                     <% } %>
                                     <button class="btn btn-lg btn-info text-light p-2 text-info">Boutique</button>
                                 </form>
@@ -99,6 +97,8 @@
     </section>
 
 </main>
+
+
 
 
 

@@ -1,7 +1,7 @@
+<%- include('./partials/nav', {user: user, flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'shop'}) %>
+
 <main class="position-static">
-    <div id="navbar" class="position-static">
-        <%- include('./partials/nav', {user: user, flag:flag, gamesNbr:gamesNbr, lives:lives, level:level, action:'shop'}) %>
-    </div>
+
     <!-- section -->
     <section class="position-static bg-transparent" id="section-shop">
         <div class="container">
@@ -19,7 +19,7 @@
                                 <button class="btn btn-lg btn-outline-info btn-block p-2 mx-2">Utiliser les points</button>
                             </form>
                         <% } %>
-                        <form action="#" method="">
+                        <form action="#" method="post">
                             <button class="btn btn-lg btn-outline-info btn-block p-2 mx-2">Acheter des points</button>
                         </form>
                     </div>
@@ -27,6 +27,7 @@
             </div>
         </div>
     </section>
+
 </main>
 
 

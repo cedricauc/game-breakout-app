@@ -1,0 +1,38 @@
+<footer id="footer" class="position-relative pb-4">
+    <div class="container">
+
+        <div class="ms-auto chat-box">
+            <div class="chat-box-header mb-1">
+                <p class="ms-auto me-3">
+                    <i class="fa fa-times"></i>
+                </p>
+            </div>
+            <div class="chat-box-body">
+                <img src="./assets/bot.png" alt="" width="50" height="40">
+                <div class="chat-box-body-send">
+                    <p id="bot-message">Bienvenue <%= user %> !
+                        La galaxie n'attend que toi. Rejoins une planète de la galaxie et commence une partie de
+                        casse-brique. Ecris moi le nom de la planète que tu souhaites rejoindre...
+                    </p>
+                </div>
+            </div>
+            <div class="chat-box-footer fs-6">
+
+                <div class="d-flex flex-grow-1 flex-column">
+                    <p class="small ms-3 mt-1 mb-0" id="message-send"></p>
+                    <div class="d-flex flex-grow-1">
+                        <input placeholder="Saisir un message" type="text" name="user-message" id="user-message">
+                        <button id="user-send"><i class="send far fa-paper-plane"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="ms-auto chat-button" id="bot" style="display: none">
+            <img src="./assets/bot.png" alt="" width="50" height="40">
+            <span></span>
+        </div>
+
+    </div>
+</footer>

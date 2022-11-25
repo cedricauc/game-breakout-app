@@ -33,7 +33,7 @@ const notificationCard = document.querySelector('#notification-card')
 const shopCard = document.querySelector('#shop-card')
 const startArea = document.querySelector('#start-area')
 const notificationMsg = document.querySelector('#notification-message')
-const container = document.querySelector('.content--canvas')
+const container = document.querySelector('.content--canvas') ?? null
 const liveText = document.querySelector('.live-text')
 const scoreText = document.querySelector('.score-text')
 const levelText = document.querySelector('.level-text')
@@ -41,6 +41,10 @@ const timerText = document.querySelector('.timer-text')
 
 const freeGameSpan = document.querySelector('#free-game')
 const gameNumberSpan = document.querySelector('#game-number')
+
+const userMessageInput = document.querySelector('#user-message')
+const botMessageParagraph = document.querySelector('#bot-message')
+const userMessageSendParagraph = document.querySelector('#message-send')
 
 let canvas = {
     a: document.createElement('canvas'),
@@ -55,7 +59,9 @@ canvas.a.style = `
 		 box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
 		 background-color:#1b1b1b;
 	`
-container.appendChild(canvas.a)
+if (container)
+    container.appendChild(canvas.a)
+
 let ctx = {
     a: canvas.a.getContext('2d'),
 }
@@ -66,6 +72,30 @@ let paddleX = (canvas.a.width - paddleWidth) / 2
 let paddleY = canvas.a.height - paddleHeight
 
 document.addEventListener('mousemove', mouseMoveHandler, false)
+// Set up touch events for mobile, etc
+canvas.a.addEventListener("touchstart", function (e) {
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent("mousedown", {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+    });
+    canvas.a.dispatchEvent(mouseEvent);
+    mouseMoveHandler(mouseEvent)
+}, false);
+canvas.a.addEventListener("touchend", function (e) {
+    const mouseEvent = new MouseEvent("mouseup", {});
+    canvas.a.dispatchEvent(mouseEvent);
+    mouseMoveHandler(mouseEvent)
+}, false);
+canvas.a.addEventListener("touchmove", function (e) {
+    const touch = e.touches[0];
+    const mouseEvent = new MouseEvent("mousemove", {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+    });
+    canvas.a.dispatchEvent(mouseEvent);
+    mouseMoveHandler(mouseEvent)
+}, false);
 
 $('#startGame').click(function (e) {
     e.preventDefault()
@@ -86,21 +116,24 @@ $('#startGame').click(function (e) {
     }
 
     if (player.host) {
-        socket.emit('play again', player)
+        socket.emit('play-again', player)
     } else {
         player.host = true
         player.socketId = socket.id
-        socket.emit('playerData', player)
+        console.log('player-data')
+        socket.emit('player-data', player)
     }
 })
 
-socket.on('join room', (roomId) => {
+socket.on('join-room', (roomId) => {
+    console.log('join-room')
     player.roomId = roomId
     player.paddleX = paddleX
     player.paddleY = paddleY
 })
 
 socket.on('play', (_score, _lives, _level, _timer, _win, _buffer) => {
+    console.log('play')
     score = _score
     lives = _lives
     level = _level
@@ -120,7 +153,7 @@ socket.on('play', (_score, _lives, _level, _timer, _win, _buffer) => {
     }
 })
 
-socket.on('play again waiting area', (gameNbr) => {
+socket.on('play-again-waiting-area', (gameNbr) => {
 
     gameNumberSpan.innerHTML = '| Jeux achetés : ' + gameNbr
 
@@ -155,7 +188,7 @@ function gameOver() {
             'Tu as perdu la partie ' + player.username + ' !',
         )
 
-        socket.emit('game over', player)
+        socket.emit('game-over', player)
     }
 }
 
@@ -172,7 +205,7 @@ function gameWin() {
             'Félicitations, tu as gagné la partie ' + player.username + ' !',
         )
 
-        socket.emit('game win', player)
+        socket.emit('game-win', player)
     }
 }
 
@@ -183,31 +216,50 @@ function setNotificationMessage(classToRemove, classToAdd, html) {
 }
 
 function draw() {
-    // const arrayBufferView = new Uint8Array(buffer)
-    // const blob = new Blob([arrayBufferView], {type: "image/png"})
-    // const uri = urlCreator.createObjectURL(blob)
-    // image.src = uri
-    // image.onload = () => {
-    //     ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
-    //     ctx.a.drawImage(image, 0, 0)
-    //     urlCreator.revokeObjectURL(uri);
-    // }
-    // image.onerror = err => {
-    //     throw err
-    // }
-    image.src = buffer
+    const arrayBufferView = new Uint8Array(buffer)
+    const blob = new Blob([arrayBufferView], {type: "image/png"})
+    const uri = urlCreator.createObjectURL(blob)
+    image.src = uri
     image.onload = () => {
         ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
-        ctx.a.save()
         ctx.a.drawImage(image, 0, 0)
-        ctx.a.restore()
+        urlCreator.revokeObjectURL(uri);
     }
-    image.onerror = err => { throw err }
+    image.onerror = err => {
+        throw err
+    }
+    // image.src = buffer
+    // image.onload = () => {
+    //     ctx.a.clearRect(0, 0, canvas.a.width, canvas.a.height)
+    //     ctx.a.save()
+    //     ctx.a.drawImage(image, 0, 0)
+    //     ctx.a.restore()
+    // }
+    // image.onerror = err => { throw err }
 
     scoreText.innerHTML = score
     liveText.innerHTML = lives
     levelText.innerHTML = level
     timerText.innerHTML = Math.round(parseFloat(timer)).toString()
 
-    socket.emit('collision detection', player)
+    socket.emit('collision-detection', player)
 }
+
+$('#user-send').click(function (e) {
+    socket.emit('user-message', userMessageInput.value)
+})
+
+socket.on('bot-message', (response, orbit) => {
+    userMessageSendParagraph.classList.add('blockquote-footer')
+    userMessageSendParagraph.innerHTML = userMessageInput.value
+    userMessageInput.value = ""
+    botMessageParagraph.innerHTML = response
+
+    if(orbit) {
+        const dest = `a.${orbit}`
+        const ref = $(dest).attr("class");
+        $("#solar-system").removeClass().addClass(ref);
+        $(dest).parent().find('a').removeClass('active');
+        $(dest).addClass('active');
+    }
+})

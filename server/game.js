@@ -1,9 +1,8 @@
 const Sprite = require('./sprite.js')
 const LevelMaker = require('./levelMaker.js')
 const Particle = require('./particle.js')
-const {getRandomIntFromArray, getRandomInt, getRandom, animateSprite} = require('./utils.js')
+const {getRandomIntFromArray, getRandomInt, getRandom, animateSprite} = require('../utils')
 const Vector = require("./vector");
-
 const Canvas = require("canvas");
 global.Image = Canvas.Image;
 

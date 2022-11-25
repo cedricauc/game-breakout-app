@@ -745,7 +745,7 @@ dl.infos dd button {
 /*}*/
 
 #navbar a, #data a, #controls label {
-    color: rgba(255, 255, 255, 0.6);
+    color: #fff;
     display: block;
     position: relative;
     text-decoration: none;
@@ -757,9 +757,7 @@ dl.infos dd button {
 
 #data, #controls {
     z-index: 99;
-    position: fixed;
     opacity: 1;
-    top: 49px;
     padding: 16px;
 }
 
@@ -928,34 +926,23 @@ body {
 
 @media screen and (min-width: 768px) {
     #universe {
-        font-size: 50%;
+        font-size: 48%;
     }
 
     #navbar, #data {
         background: transparent;
     }
 
-    /*#navbar a {*/
-    /*    display: none; }*/
     h1 {
         font-size: 22px;
         margin-top: 8px;
     }
 
     #data {
-        position: fixed;
         top: inherit;
         bottom: 0;
         width: 100%;
         text-align: center;
-    }
-
-    #navbar {
-        /*position: fixed;
-        top: inherit;
-        top: 0;
-        width: 100%;
-        text-align: center; */
     }
 
     #data a {
@@ -983,7 +970,7 @@ body {
 
 @media screen and (min-width: 1400px) {
     #universe {
-        font-size: 76%;
+        font-size: 70%;
     }
 }
 

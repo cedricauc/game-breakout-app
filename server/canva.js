@@ -76,7 +76,7 @@ class Canva {
 
     draw(particles, balls, paddles, bricks, bonuses, hue) {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-        this.drawParticles(particles, hue)
+        //this.drawParticles(particles, hue)
         this.drawBricks(bricks)
         this.drawBalls(balls)
         this.drawPaddle(paddles)
